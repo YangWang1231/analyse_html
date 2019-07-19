@@ -6,40 +6,51 @@ from    bs4 import BeautifulSoup
 
 base_url = ''   #基础路径
 
-#<td bgcolor='#FF8181', align=center><font color='blue'> <center> <a
-#href='example_link_popup11S.htm' onClick='return popup(this, "knotes")'>
-#16</a> </center> </font></td>
+#从html文件中得到一条规则的具体违背情况
+#对应一个popup页面，也就是一条规则的详细违背情况，包括 (function name, line number)
 class violations_info(object):
-    violations_num = 0  #Number of Violations
-    ref_link = ''   #link string of href='example_link_popup11S.htm'
-    violatons_detail = []   #list store violation info .etc [(traverse , 28), ( reservedLookup , 68)]
-    bsObj = None
-
     def __init__(self, td_element):
+        self.violations_num = 0
+        self.ref_link = ''
+        self.violatons_detail = []      
+        
         a_tag = td_element.find('a')       
         file_name = a_tag['href']
-        ref_link = base_url + file_name
+        self.ref_link = base_url + file_name
         #open ref_link file and get details
-        html = urlopen(ref_link)
-        bsObj = BeautifulSoup(html.read(), features="html.parser") 
+        html = urlopen(self.ref_link)
+        self.bsObj = BeautifulSoup(html.read(), features="html.parser") 
 
-    #从html文件中得到一条规则的具体违背情况
-    def get_violations_detail():
-
-        return violatons_detail
+    #每条规则的html模式如下：
+    #<td bgcolor='#FF8181', align=center><font color='blue'> <center> <a
+    #href='example_link_popup11S.htm' onClick='return popup(this, "knotes")'>
+    #16</a> </center> </font></td>
+    def get_violations_detail(self):
+        if len(self.violatons_detail) == 0:
+            a_list = self.bsObj.find_all('a')
+            function_name = ''
+            line_num = 0
+            for i, a_element in  enumerate(a_list):
+                if i % 2 == 0: #function name
+                    functiion_name = a_element.get_text().strip()
+                else: #line number
+                    line_num = int(a_element.get_text().strip())
+                    self.violatons_detail.append((functiion_name, line_num))
+        return self.violatons_detail
 
 #存储分析结果表格信息的类，包含以下四类信息
 class rule_table_row(object):
-    violation_num = 0       #Number of Violations
-    LDRA_code = ''          #LDRA Code
-    mandatory_std = ''      #Mandatory Standards
-    standard_code = ''      #GJB_8114 Code
-                 
-    def __init__(self, v_num, l_code, man_std, std_code):
+    #violation_num = 0       Number of Violations
+    #LDRA_code = ''          #LDRA Code
+    #mandatory_std = ''      #Mandatory Standards
+    #standard_code = ''      #GJB_8114 Code
+     #detail_list                   #rule obey details
+    def __init__(self, v_num, l_code, man_std, std_code, detail_list):
         self.violation_num = v_num
         self.LDRA_code = l_code
         self.mandatory_std = man_std
         self.standard_code = std_code
+        self.detail_list = detail_list
 
 script_pattern_string = u'\'.*?\''
 script_regex = re.compile(script_pattern_string)
@@ -86,7 +97,7 @@ def process_one_row(table_row):
                 l_code = td_list[1].string
                 m_string = strip_mandatory_standard(td_list[2].script.string)
                 r_string = strip_standard_rule_number(td_list[3].script.string)
-                v = rule_table_row(v_num,l_code,m_string,r_string)
+                v = rule_table_row(v_num,l_code,m_string,r_string,v_detail_list)
                 return v
         else:
                 return None
