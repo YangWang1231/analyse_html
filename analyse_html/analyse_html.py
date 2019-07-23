@@ -78,12 +78,21 @@ class rule_table_row(object):
 class rule_reports(object):
     script_pattern_string = u'\'.*?\''
     script_regex = re.compile(script_pattern_string)
+    
     def __init__(self):
         self.fileurl = ''
         self.baseurl = ''
         self.result_list = []        #list of rule_table_row.  Overall Code Review Summary
         self.bsObj = None
         self.html = None
+
+    def rule_results(self):
+        """
+        生成器算法，将rule_reports对象变成一个可以迭代的对象
+        """
+        for row in self.result_list:
+            yield row
+        
         
     #脚本文件主函数
     #处理一个htlm文件
