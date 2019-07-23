@@ -29,6 +29,9 @@
     <Compile Include="module1.py">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="module2.py">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="store_db_sqlit3.py">
       <SubType>Code</SubType>
     </Compile>

@@ -15,26 +15,11 @@ create table projects(
     FOREIGN KEY(userid) REFERENCES user(id)
 );
 
-/*描述一个被测软件的规则违背情况*/
-create table rule_obey_info(
-    id integer primary key autoincrement,
-    projectid integer not null,
-    LDRA_Code text not null,
-    location_function text not null,
-    line_numbers text not null,
-    foreign key(projectid) references projects(id)
-    /*外键通常是另一个表的主键，但也不是强制的
-    但是在目前的场景下不能使用外键，因为LDRA_rule的LDRACode字段不是unique，外键主要是为了保证字段的完整性
-    */
-    foreign key(LDRA_Code) references LDRA_rule(LDRACode) 
-    );
 
-
-    
 
 create table GBJ8114_rule(
     id integer primary key autoincrement,
-    GJB8114Code text not null,
+    GJB8114Code text unique,
     Rule_description text not null,
     MandatoryStandard_ch text,    
     /*should be enum (recommended, mandatory), but sqlite has no enum support, 
@@ -57,6 +42,19 @@ create table GJB_LDRA_relation_table(
     foreign key(LDRA_id) references LDRA_rule(id)
 );
 
+/*描述一个被测软件的规则违背情况*/
+create table rule_obey_info(
+    id integer primary key autoincrement,
+    projectid integer not null,
+    LDRA_Code text not null,
+    location_function text not null,
+    line_numbers text not null,
+    foreign key(projectid) references projects(id)
+    /*外键通常是另一个表的主键，但也不是强制的
+    但是在目前的场景下不能使用外键，因为LDRA_rule的LDRACode字段不是unique，外键主要是为了保证字段的完整性
+    */
+    foreign key(LDRA_Code) references LDRA_rule(LDRACode) 
+    );
 
 /*描述testbed规则的基本情况，目前仅包含强制类规则*/    
 /*

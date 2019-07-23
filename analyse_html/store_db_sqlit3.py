@@ -5,7 +5,7 @@ from    analyse_html import violations_info,  rule_reports, violations_info
 import sqlite3
 from    sqlite3 import Error
 
-class process_bd(object):
+class process_db(object):
     def __init__(self, db_path=r'C:\Users\Administrator\source\repos\FlaskWebProject3\FlaskWebProject3\instance\flaskr.sqlite'):
         self.db_url = db_path
         self.db_conn = self.create_connection(db_path)
@@ -52,11 +52,40 @@ class process_bd(object):
  
         return None
 
+    def get_ldra_id(self,ldra_code):
+        cur = self.db_conn.cursor()
+        sql = '''select * from LDRA_rule where LDRACode = ? '''
+        cur.execute(sql, (ldra_code,))
+        row = cur.fetchone()
+        if row != None:
+            return row['id']
+        else:
+            return None
+
+
+
     def insert_LDRA_rule(self, ldra_rule)  :
         cur = self.db_conn.cursor()
-        sql = '''insert into LDRA_rule(GJB8114Code, LDRACode,  MandatoryStanard_en,  MandatoryStandard_ch,  Rule_classification)
-                values (?,?,?,?,?) '''
+        sql = '''insert into LDRA_rule(LDRACode,  MandatoryStanard_en)
+                values (?,?) '''
         cur.execute(sql, ldra_rule)
+        return cur.lastrowid
+
+    def insert_GJB8114_rule(self, GJB8114_rule)  :
+        cur = self.db_conn.cursor()
+        sql = '''insert into GBJ8114_rule(GJB8114Code,  Rule_description, MandatoryStandard_ch, Rule_classification)
+                values (?,?,?,?) '''
+        cur.execute(sql, GJB8114_rule)
+        return cur.lastrowid
+
+    def insert_GJB_LDRA_relation_table(self, GJB8114_LDRA_relation)  :
+        cur = self.db_conn.cursor()
+        sql = '''insert into GJB_LDRA_relation_table(GJB8114_id,  LDRA_id)
+                values (?,?) '''
+        cur.execute(sql, GJB8114_LDRA_relation)
+   
+    def create_GJB_LDRA_realtion_table(self):
+        pass
         
     def insert_rule_obey_info(self, rule_obey_info):
         cur = self.db_conn.cursor()
@@ -141,7 +170,7 @@ if __name__ == '__main__':
     report.analyse_html(html)
 
     #store to DB
-    db_obj = process_bd()
+    db_obj = process_db()
     db_obj.init_db_for_debug()
     #userid , proid = db_obj.get_userid_projectid()
     db_obj.store_to_db(report)
