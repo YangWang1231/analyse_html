@@ -5,6 +5,7 @@ from    urllib import urlopen
 from    bs4 import BeautifulSoup
 
 
+
 #从html文件中得到一条规则的具体违背情况
 #对应一个popup页面，也就是一条规则的详细违背情况，包括 {function name : [line number1, line number2,
 #line number3....] }
