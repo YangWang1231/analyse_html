@@ -1,7 +1,7 @@
 #!/usr/bin/python
  #coding:utf-8
 
-from    analyse_html import violations_info,  rule_reports, violations_info
+from    analyse_html_rule import violations_info,  rule_reports, violations_info
 import sqlite3
 from    sqlite3 import Error
 
@@ -36,7 +36,23 @@ class process_db(object):
         """
         userid , proid = self.get_userid_projectid()
         for row in rule_report.rule_results():
-            pass                                                    
+            LDRA_code = row.LDRA_code
+            for functionname, err_list in row.detail_dict.iteritems():
+                line_str = ','.join(str(e) for e in err_list)
+                rule_obey_item = (proid, LDRA_code, functionname, line_str)
+                self.insert_rule_obey_info(rule_obey_item)
+
+        self.commit()
+        return 
+
+
+
+    def insert_rule_obey_info(self, obey_info):
+        cur = self.db_conn.cursor()
+        sql = '''insert into rule_obey_info(projectid,  LDRA_Code, location_function, line_numbers)
+                values (?,?,?,?) '''
+        cur.execute(sql, obey_info)
+        return 
             
     def create_connection(self, db_file):
         """ create a database connection to the SQLite database
@@ -87,10 +103,7 @@ class process_db(object):
     def create_GJB_LDRA_realtion_table(self):
         pass
         
-    def insert_rule_obey_info(self, rule_obey_info):
-        cur = self.db_conn.cursor()
-        sql = '''inset into rule_obey_info(projectid, ldracode,location_function, line_numbers) 
-        values(?,?,?,?)'''
+
 
     def insert_project(self, project):
         """
