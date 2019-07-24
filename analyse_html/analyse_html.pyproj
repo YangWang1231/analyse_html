@@ -4,7 +4,7 @@
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>4eeaa17f-2e95-480c-8417-8799fc0bfb95</ProjectGuid>
     <ProjectHome>.</ProjectHome>
-    <StartupFile>store_db_sqlit3.py</StartupFile>
+    <StartupFile>analyse_html_matrix.py</StartupFile>
     <SearchPath>
     </SearchPath>
     <WorkingDirectory>.</WorkingDirectory>
@@ -22,6 +22,9 @@
     <EnableUnmanagedDebugging>false</EnableUnmanagedDebugging>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="analyse_html_matrix.py">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="analyse_html_rule.py" />
     <Compile Include="make_LDRA_rule_table.py">
       <SubType>Code</SubType>
