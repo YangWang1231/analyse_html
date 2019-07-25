@@ -263,3 +263,6 @@ __pycache__/
 /analyse_html/env_analyze_html
 /analyse_html/q6996603.sqlite
 /analyse_html/LDRA973-support-Gjb8114.xlsx
+/analyse_html/data_file.json
+/analyse_html/complexity_metrics_info.dat
+/analyse_html/temp_reformatted_code_info.dat
