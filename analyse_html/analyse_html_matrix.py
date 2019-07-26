@@ -80,25 +80,29 @@ class reformated_code_information(object):
 
 
 
-class function_complexity_fanout(object):
-    def __init__(self):
-        self.function_name = ''
-        self.Cyclomatic_information = 0
-        self.fanout = 0
+class function_complexity(object):
+    def __init__(self, fun_name = '' , cycl_info = 0):
+        self.function_name = fun_name
+        self.Cyclomatic_information = cycl_info
+
+class function_fanout(object):
+    def __init__(self, func_name = '', fout = 0):
+        self.function_name = func_name
+        self.fanout = fout
 
 
 class metrix_report(object):
     """
-    处理一个软件的metrix report
+    处理一个源文件的metrix report
     """
     def __init__(self):
-        slef.filename = ''
+        self.filename = ''
         self.reformated_code_information = reformated_code_information()
-        self.complexity_metrics = [] #list of function_complexity_fanout
+        self.complexity_metrics = [] #list of function complexity
+        self.fanout_info = [] #list of function fanout
         return 
 
-    def fun(self, name):
-        pass
+    
     
 
 class process_metrix_repot(object):
@@ -106,41 +110,50 @@ class process_metrix_repot(object):
         self.fileurl = ''
         self.html = None
         self.bsObj = None
-
+        self.match_digital_string = '\d+\.?\d*' #匹配数字
+        self.match_file_name = '\([^()]*\)'    #匹配括号内源文件名称
 
 
     def get_reformated_info(self, content_table):
-        #<table bgcolor="#ECE2E2" width="100%">
-        #<tbody>
-        #<tr align="LEFT"><th> File </th><th> Total Ref.  </th><th> Total
-        #</th><th> Executable </th><th> Non-Executable </th><th> Number of
-        #</th><th> Total </th><th> Expansion </th></tr>
-        #<tr align="LEFT"><th> &nbsp; </th><th> <u> Lines </u> </th><th> <u>
-        #Comments </u> </th><th> <u> Ref.  Lines </u> </th><th> <u> Ref.  Lines
-        #</u> </th><th> <u> Procedures </u> </th><th> <u> Src.  Lines </u>
-        #</th><th> <u> Factor </u> </th></tr>
-        #<tr align="LEFT"><th colspan="8"> &nbsp; </th></tr>
-        #<tr align="LEFT"><td> Total for UTIL.C </td><td><font color="#008000">
-        #538 (P) </font></td><td><font color="#008000"> 92 (P) (17%)
-        #</font></td><td><font color="#008000"> 245 (P) (46%)
-        #</font></td><td><font color="#008000"> 201 (P) (37%)
-        #</font></td><td><font color="#008000"> 6 (P) </font></td><td><font
-        #color="#008000"> 315 (P) </font></td><td><font color="#008000"> 1.71
-        #(P) </font></td></tr>
-        #</tbody></table>
-            tr_list = content_table.find_all('tr')
-            tr_list = tr_list[3:] #前面三行是固定的无用内容
-            for tr in tr_list:
-                td_list = tr.find_all('td')
-                numberlist = [ td.string.strip() for td in td_list[1 : 6]  ]
-                #使用正则表达式把真实数字从numberlist中提取出来
-                real_number = [int(self.script_regex.findall(numberstring)[0]) for numberstring in numberlist]
-                #一个很方便的列表初始化函数参数列表的方法 function(*list_name)
-                reformat_code_info = reformated_code_information(*real_number)
-                pass
-            return reformat_code_info
+        """
+        获取软件基本信息，包括模块数量
+        处理<a id="reformatted code information for file">tag下面的表格信息，表格内如如下
+        <table bgcolor="#ECE2E2" width="100%">
+        <tbody>
+        <tr align="LEFT"><th> File </th><th> Total Ref.  </th><th> Total
+        </th><th> Executable </th><th> Non-Executable </th><th> Number of
+        </th><th> Total </th><th> Expansion </th></tr>
+        <tr align="LEFT"><th> &nbsp; </th><th> <u> Lines </u> </th><th> <u>
+        Comments </u> </th><th> <u> Ref.  Lines </u> </th><th> <u> Ref.  Lines
+        </u> </th><th> <u> Procedures </u> </th><th> <u> Src.  Lines </u>
+        </th><th> <u> Factor </u> </th></tr>
+        <tr align="LEFT"><th colspan="8"> &nbsp; </th></tr>
+        <tr align="LEFT"><td> Total for UTIL.C </td><td><font color="#008000">
+        538 (P) </font></td><td><font color="#008000"> 92 (P) (17%)
+        </font></td><td><font color="#008000"> 245 (P) (46%)
+        </font></td><td><font color="#008000"> 201 (P) (37%)
+        </font></td><td><font color="#008000"> 6 (P) </font></td><td><font
+        color="#008000"> 315 (P) </font></td><td><font color="#008000"> 1.71
+        (P) </font></td></tr>
+        </tbody></table>
+        """
+        tr_list = content_table.find_all('tr')
+        tr_list = tr_list[3:] #前面三行是固定的无用内容
+        for tr in tr_list:
+            td_list = tr.find_all('td')
+            numberlist = [ td.string.strip() for td in td_list[1 : 6]  ]
+            #使用正则表达式把真实数字从numberlist中提取出来
+            real_number = [int(self.script_regex.findall(numberstring)[0]) for numberstring in numberlist]
+            #一个很方便的列表初始化函数参数列表的方法 function(*list_name)
+            reformat_code_info = reformated_code_information(*real_number)
+            pass
+        return reformat_code_info
 
     def get_metrix_complextity_info(self,  content_table):
+        """
+        获取圈复杂度
+        处理<a id="complexity metrics">Complexity Metrics (UTIL.C)</a>下面的信息
+        """
         tr_list = content_table.find_all('tr')
         if len(tr_list) > 4:
             tr_list = tr_list[3:-2] #前面3行是固定的无用内容，后面2行是无用的内容
@@ -174,6 +187,16 @@ class process_metrix_repot(object):
                 data_flow_list.append((function_name , fanout_num ))
         return data_flow_list
 
+
+    def extract_file_name(self, reformat_tag):
+        """
+        从tag中获取源文件名称
+        """
+        filename = reformat_tag.string
+        filename =self.filename_regex.findall(filename)[0]
+        filename = filename[1:-1]
+        return filename
+
     def analyse_html(self,file_url):
             """
             脚本文件主函数
@@ -195,9 +218,39 @@ class process_metrix_repot(object):
             self.fileurl = file_url
             self.html = urlopen(file_url)
             self.bsObj = BeautifulSoup(self.html.read(), features="html.parser") 
-            self.match_digital_string = '\d+\.?\d*' #匹配数字
             self.script_regex = re.compile(self.match_digital_string)
-            
+            self.filename_regex = re.compile(self.match_file_name)
+            self.total_info_dict = {} #filename , metrix_report class instance
+
+
+            #process all reformatted code information
+            #list of reformated_code_information class instance
+
+            reformat_codelist = []
+            reformat_title_list = self.bsObj.find_all(u'a', id = u'reformatted code information for file')
+            with open("temp_reformatted_code_info.dat",'w') as write_file:
+                for reformat_tag in reformat_title_list:
+                    #从tag的context获取filename
+                    filename = self.extract_file_name(reformat_tag)
+
+                    #add to total info dict for future useage
+                    one_file_info =   metrix_report()
+                    one_file_info.filename = filename
+                    self.total_info_dict[filename] = one_file_info
+
+                    write_file.write("%s\n" % reformat_tag)
+                    for e in reformat_tag.parent.next_siblings:
+                        if e.name == 'center':
+                            content_table = e.find_all('table')[1] #获取第二个table
+                            #获取第二个table中的tr
+                            reformat_code_info = self.get_reformated_info(content_table)
+                            #store
+                            one_file_info.reformated_code_information = reformat_code_info
+                            #DEBUG
+                            reformat_codelist.append(reformat_code_info)
+                            write_file.write("%s\n" % reformat_code_info)
+                            write_file.flush()
+                            break
 
             #dataflow information
         #    3. dataflow information:   (<a id="dataflow information">Dataflow Information (UTIL.C)</a> )
@@ -211,12 +264,22 @@ class process_metrix_repot(object):
             data_flow_title_list = self.bsObj.find_all(u'a', id = u'dataflow information')
             with open("data_flow_info.dat",'w') as write_file:
                 for data_flow_tag in data_flow_title_list:
+                    #从tag的context获取filename
+                    filename = self.extract_file_name(data_flow_tag)
+                    if filename in self.total_info_dict :
+                        one_file_info = self.total_info_dict[filename]
+
                     write_file.write("%s\n" % data_flow_tag)
                     for e in data_flow_tag.parent.next_siblings:
                         if e.name == 'center':
                             content_table = e.find_all('table')[1] #获取第二个table
                             #获取第二个table中的tr
                             data_flow_info = self.get_data_flow_info(content_table)
+                            for e in data_flow_info:
+                                data_flow = function_fanout(*e)
+                                one_file_info.fanout_info.append(data_flow)
+                            
+                            #debug
                             dataflow_list.append(data_flow_info)
                             write_file.write("%s\n" % data_flow_info)
                             #write_file.write('%s\n' % content_table)
@@ -224,40 +287,30 @@ class process_metrix_repot(object):
                             break
             pass
 
-            #process all reformatted code information
-            #list of reformated_code_information class instance
-            reformat_codelist = []
-            reformat_title_list = self.bsObj.find_all(u'a', id = u'reformatted code information for file')
-            with open("temp_reformatted_code_info.dat",'w') as write_file:
-                for reformat_tag in reformat_title_list:
-                    write_file.write("%s\n" % reformat_tag)
-                    for e in reformat_tag.parent.next_siblings:
-                        if e.name == 'center':
-                            content_table = e.find_all('table')[1] #获取第二个table
-                            #获取第二个table中的tr
-                            reformat_code_info = self.get_reformated_info(content_table)
-                            reformat_codelist.append(reformat_code_info)
-                            write_file.write("%s\n" % reformat_code_info)
-                            #write_file.write('%s\n' % content_table)
-                            write_file.flush()
-                            break
-
             #process complexity metrics                    
             complexity_metrics_list = []
             complextity_title_list = self.bsObj.find_all(u'a', id = u'complexity metrics')
             with open("complexity_metrics_info.dat",'w') as write_file:
                for complextity_tag in complextity_title_list:
+                    filename = self.extract_file_name(complextity_tag)
+                    if filename in self.total_info_dict :
+                        one_file_info = self.total_info_dict[filename]
+                    
                     write_file.write("%s\n" % complextity_tag)
                     for e in complextity_tag.parent.next_siblings:
                         if e.name == 'center':
                             content_table = e.find_all('table')[1] #获取第二个table
                             metrix_info = self.get_metrix_complextity_info(content_table)
+                            for e in metrix_info:
+                                l = function_complexity(*e)
+                                one_file_info.complexity_metrics.append(l)
+                            
+                            #debug
                             complexity_metrics_list.append(metrix_info)
                             write_file.write("%s\n" % '  '.join(str(e) for e in metrix_info))
                             write_file.flush()
                             break
-                            
-            pass
+            return
                     
 
 
