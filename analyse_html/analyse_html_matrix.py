@@ -65,6 +65,7 @@ TODO:
 import re
 from    urllib import urlopen
 from    bs4 import BeautifulSoup
+import json
 
 class reformated_code_information(object):
     def __init__(self, totaline=0, totalcomment=0, executeablelines=0, nonexecuteablelines=0, numberOfprocedure=0):
@@ -89,6 +90,10 @@ class function_fanout(object):
     def __init__(self, func_name = '', fout = 0):
         self.function_name = func_name
         self.fanout = fout
+
+class temp_class(object):
+    def __init__(self):
+        self.list_names = [function_fanout(), function_fanout()]
 
 
 class metrix_report(object):
@@ -196,6 +201,15 @@ class process_metrix_repot(object):
         filename =self.filename_regex.findall(filename)[0]
         filename = filename[1:-1]
         return filename
+
+    def trans_to_JSON(self):
+            """
+            将metrix_report转换为JSON对象
+            """
+            for k, v in self.total_info_dict.iteritems():
+                jobj = json.dumps(v.__dict__)
+            
+            pass
 
     def analyse_html(self,file_url):
             """
@@ -320,3 +334,4 @@ if __name__ == '__main__':
     html = u"file:///C:/LDRA_Workarea/example_tbwrkfls/example.mts.htm"
     report = process_metrix_repot()
     report.analyse_html(html)
+    report.trans_to_JSON()

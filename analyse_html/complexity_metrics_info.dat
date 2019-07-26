@@ -1,0 +1,20 @@
+<a id="complexity metrics">Complexity Metrics (UTIL.C)</a>
+(u'printToken', 16)  (u'newStmtNode', 3)  (u'newExpNode', 3)  (u'copyString', 3)  (u'printSpaces', 2)  (u'printTree', 13)
+<a id="complexity metrics">Complexity Metrics (TM.C)</a>
+(u'opClass', 3)  (u'writeInstruction', 5)  (u'getCh', 2)  (u'nonBlank', 4)  (u'getNum', 9)  (u'getWord', 4)  (u'skipCh', 3)  (u'atEOL', 1)  (u'error', 2)  (u'readInstructions', 38)  (u'stepTM', 34)  (u'doCommand', 40)  (u'main', 6)
+<a id="complexity metrics">Complexity Metrics (SYMTAB.C)</a>
+(u'hash', 2)  (u'st_insert', 5)  (u'st_lookup', 4)  (u'printSymTab', 5)
+<a id="complexity metrics">Complexity Metrics (SCAN.C)</a>
+(u'getNextChar', 4)  (u'ungetNextChar', 2)  (u'reservedLookup', 3)  (u'getToken', 34)
+<a id="complexity metrics">Complexity Metrics (PARSE.C)</a>
+(u'syntaxError', 1)  (u'match', 2)  (u'stmt_sequence', 7)  (u'statement', 6)  (u'if_stmt', 5)  (u'repeat_stmt', 3)  (u'assign_stmt', 4)  (u'read_stmt', 3)  (u'write_stmt', 2)  (u'exp', 5)  (u'simple_exp', 4)  (u'term', 4)  (u'factor', 8)  (u'parse', 2)
+<a id="complexity metrics">Complexity Metrics (MAIN.C)</a>
+(u'main', 11)
+<a id="complexity metrics">Complexity Metrics (CODE.C)</a>
+(u'emitComment', 2)  (u'emitRO', 3)  (u'emitRM', 3)  (u'emitSkip', 2)  (u'emitBackup', 2)  (u'emitRestore', 1)  (u'emitRM_Abs', 3)
+<a id="complexity metrics">Complexity Metrics (CGEN.C)</a>
+(u'genStmt', 12)  (u'genExp', 16)  (u'cGen', 4)  (u'codeGen', 1)
+<a id="complexity metrics">Complexity Metrics (ANALYZE.C)</a>
+(u'traverse', 3)  (u'nullProc', 2)  (u'insertNode', 7)  (u'buildSymtab', 2)  (u'typeError', 1)  (u'checkNode', 17)  (u'typeCheck', 1)
+<a id="complexity metrics">Complexity Metrics (AsyncLogging.cpp)</a>
+(u'AsyncLogging::AsyncLogging', 1)  (u'AsyncLogging::append', 3)  (u'AsyncLogging::threadFunc', 11)
