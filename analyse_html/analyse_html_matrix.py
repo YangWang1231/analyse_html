@@ -157,6 +157,23 @@ class process_metrix_repot(object):
                 comlextity_list.append((function_name , complextity_num ))
         return comlextity_list
 
+    def get_data_flow_info(self,  content_table):
+        tr_list = content_table.find_all('tr')
+        if len(tr_list) > 4:
+            tr_list = tr_list[3:-2] #前面3行是固定的无用内容，后面2行是无用的内容
+        else:
+            tr_list = tr_list[3:]
+
+        data_flow_list= []
+        for tr in tr_list:
+            td_list = tr.find_all('td')
+            function_name , fanout_num = td_list[0].string.strip(), td_list[3].string.strip()
+            number_mattched = self.script_regex.findall(fanout_num)
+            if len(number_mattched) != 0: #testbed 报告每10个函数有一个空行
+                fanout_num = int(number_mattched[0])
+                data_flow_list.append((function_name , fanout_num ))
+        return data_flow_list
+
     def analyse_html(self,file_url):
             """
             脚本文件主函数
@@ -181,6 +198,31 @@ class process_metrix_repot(object):
             self.match_digital_string = '\d+\.?\d*' #匹配数字
             self.script_regex = re.compile(self.match_digital_string)
             
+
+            #dataflow information
+        #    3. dataflow information:   (<a id="dataflow information">Dataflow Information (UTIL.C)</a> )
+        #    [
+        #        {       function name : string,      fan out number : int    },
+        #        {       function name : string,      fan out number : int    },
+        #        {       function name : string,      fan out number : int    },
+        #    ]
+
+            dataflow_list= []
+            data_flow_title_list = self.bsObj.find_all(u'a', id = u'dataflow information')
+            with open("data_flow_info.dat",'w') as write_file:
+                for data_flow_tag in data_flow_title_list:
+                    write_file.write("%s\n" % data_flow_tag)
+                    for e in data_flow_tag.parent.next_siblings:
+                        if e.name == 'center':
+                            content_table = e.find_all('table')[1] #获取第二个table
+                            #获取第二个table中的tr
+                            data_flow_info = self.get_data_flow_info(content_table)
+                            dataflow_list.append(data_flow_info)
+                            write_file.write("%s\n" % data_flow_info)
+                            #write_file.write('%s\n' % content_table)
+                            write_file.flush()
+                            break
+            pass
 
             #process all reformatted code information
             #list of reformated_code_information class instance
