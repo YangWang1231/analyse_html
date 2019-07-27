@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html><head>
+<title> Popup </title>
+
+<style type="text/css">
+.orag-line, .break {background-color: #ff7b42;}
+.blue-line {background-color: #000080;}
+.break-p {background-color: #000084;}
+.break-p, .break {border-radius:10px;}
+div {padding:0;margin:0;}
+h2,h3,.header {text-align:center;}
+table td {text-align:left;}
+table {margin:auto;}
+ p.pagebreak {page-break-before: always}
+ p.nopagebreak {page-break-after: never}
+ p.shiftleft {margin-left:-54.0pt}
+ ul {padding-left: 20px;}
+ br.pagebreak {page-break-before: always}
+</style>
+
+
+
+<SCRIPT LANGUAGE="Javascript">
+
+function popup(mylink, windowname)
+{
+if (! window.focus && window.opener)
+{
+return true;
+}
+var href;
+var temp;
+if (typeof(mylink)=='string')
+{
+href=mylink;
+}
+else
+{
+href=mylink.href;
+temp = window.open(href, windowname, 'width=600,        height=300,scrollbars=yes');
+temp.focus();
+return false;
+}
+}
+function targetopener(mylink, closeme, closeonly)
+{
+if (! (window.focus && window.opener))     return true;
+if (! closeonly)                                 window.opener.location.href=mylink.href;
+window.blur();
+window.opener.focus();
+if (closeme)                                    window.close();
+return false;
+return false;
+}
+
+</SCRIPT>
+
+<SCRIPT LANGUAGE="Javascript" SRC="imagejs.js"> 
+// -->
+</SCRIPT>
+</head><body bgcolor="#FFFFF2"  > 
+
+<div class="break"style="width:80%;height:10px;margin:0px auto;display:block;"></div>
+<BR>
+<script language='javascript'>if(navigator.appName == 'Netscape'){ document.write('<form>') }</script><h3><INPUT TYPE='CHECKBOX' NAME='CHECK_BOXLL' VALUE='ONTOP'> KEEP POPUP WINDOW ON TOP </INPUT></h3>
+<script language='javascript'>if(navigator.appName == 'Netscape'){ document.write('</form>') }</script><h1>Links to Violation
+</h1>
+<h3>63 - EMPTY PARAMETER LIST TO PROCEDURE/FUNCTION.</h3>
+<b>Violation Number</b> : 63 - Empty parameter list to procedure/function. &nbsp;&nbsp;&nbsp; <b>Location</b>  : <a href = 'example.rps.htm#AsyncLogging::threadFunc_AsyncLogging.cpp_AsyncLogging.cpp_3' onBlur='if (CHECK_BOXLL.checked) window.focus();return;' onClick='return targetopener(this)'>AsyncLogging::threadFunc</a> - <a href="ldra://editor/?File=C:\Users\Administrator\Desktop\muduo\base\AsyncLogging.cpp&Line=53">53</a><br>
+
+</BODY>
+</HTML>
+
+</BODY>
+</HTML>

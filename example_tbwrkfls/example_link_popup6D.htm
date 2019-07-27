@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html><head>
+<title> Popup </title>
+
+<style type="text/css">
+.orag-line, .break {background-color: #ff7b42;}
+.blue-line {background-color: #000080;}
+.break-p {background-color: #000084;}
+.break-p, .break {border-radius:10px;}
+div {padding:0;margin:0;}
+h2,h3,.header {text-align:center;}
+table td {text-align:left;}
+table {margin:auto;}
+ p.pagebreak {page-break-before: always}
+ p.nopagebreak {page-break-after: never}
+ p.shiftleft {margin-left:-54.0pt}
+ ul {padding-left: 20px;}
+ br.pagebreak {page-break-before: always}
+</style>
+
+
+
+<SCRIPT LANGUAGE="Javascript">
+
+function popup(mylink, windowname)
+{
+if (! window.focus && window.opener)
+{
+return true;
+}
+var href;
+var temp;
+if (typeof(mylink)=='string')
+{
+href=mylink;
+}
+else
+{
+href=mylink.href;
+temp = window.open(href, windowname, 'width=600,        height=300,scrollbars=yes');
+temp.focus();
+return false;
+}
+}
+function targetopener(mylink, closeme, closeonly)
+{
+if (! (window.focus && window.opener))     return true;
+if (! closeonly)                                 window.opener.location.href=mylink.href;
+window.blur();
+window.opener.focus();
+if (closeme)                                    window.close();
+return false;
+return false;
+}
+
+</SCRIPT>
+
+<SCRIPT LANGUAGE="Javascript" SRC="imagejs.js"> 
+// -->
+</SCRIPT>
+</head><body bgcolor="#FFFFF2"  > 
+
+<div class="break"style="width:80%;height:10px;margin:0px auto;display:block;"></div>
+<BR>
+<script language='javascript'>if(navigator.appName == 'Netscape'){ document.write('<form>') }</script><h3><INPUT TYPE='CHECKBOX' NAME='CHECK_BOXLL' VALUE='ONTOP'> KEEP POPUP WINDOW ON TOP </INPUT></h3>
+<script language='javascript'>if(navigator.appName == 'Netscape'){ document.write('</form>') }</script><h1>Links to Violation
+</h1>
+<h3>6 - RECURSION IN PROCEDURE CALLS FOUND.</h3>
+<b>Violation Number</b> : 6 - Recursion in procedure calls found. &nbsp;&nbsp;&nbsp; <b>Location</b>  : <a href = 'example.rps.htm#traverse_ANALYZE.C_ANALYZE.C_1' onBlur='if (CHECK_BOXLL.checked) window.focus();return;' onClick='return targetopener(this)'>traverse</a> - <a href="ldra://editor/?File=D:\wy\codes\loucomp\ANALYZE.C&Line=21">21</a><br>
+<b>Violation Number</b> : 6 - Recursion in procedure calls found. &nbsp;&nbsp;&nbsp; <b>Location</b>  : <a href = 'example.rps.htm#buildSymtab_ANALYZE.C_ANALYZE.C_4' onBlur='if (CHECK_BOXLL.checked) window.focus();return;' onClick='return targetopener(this)'>buildSymtab</a> - <a href="ldra://editor/?File=D:\wy\codes\loucomp\ANALYZE.C&Line=89">89</a><br>
+<b>Violation Number</b> : 6 - Recursion in procedure calls found. &nbsp;&nbsp;&nbsp; <b>Location</b>  : <a href = 'example.rps.htm#typeCheck_ANALYZE.C_ANALYZE.C_7' onBlur='if (CHECK_BOXLL.checked) window.focus();return;' onClick='return targetopener(this)'>typeCheck</a> - <a href="ldra://editor/?File=D:\wy\codes\loucomp\ANALYZE.C&Line=157">157</a><br>
+<b>Violation Number</b> : 6 - Recursion in procedure calls found. &nbsp;&nbsp;&nbsp; <b>Location</b>  : <a href = 'example.rps.htm#genStmt_CGEN.C_CGEN.C_1' onBlur='if (CHECK_BOXLL.checked) window.focus();return;' onClick='return targetopener(this)'>genStmt</a> - <a href="ldra://editor/?File=D:\wy\codes\loucomp\CGEN.C&Line=25">25</a><br>
+<b>Violation Number</b> : 6 - Recursion in procedure calls found. &nbsp;&nbsp;&nbsp; <b>Location</b>  : <a href = 'example.rps.htm#genExp_CGEN.C_CGEN.C_2' onBlur='if (CHECK_BOXLL.checked) window.focus();return;' onClick='return targetopener(this)'>genExp</a> - <a href="ldra://editor/?File=D:\wy\codes\loucomp\CGEN.C&Line=98">98</a><br>
+<b>Violation Number</b> : 6 - Recursion in procedure calls found. &nbsp;&nbsp;&nbsp; <b>Location</b>  : <a href = 'example.rps.htm#cGen_CGEN.C_CGEN.C_3' onBlur='if (CHECK_BOXLL.checked) window.focus();return;' onClick='return targetopener(this)'>cGen</a> - <a href="ldra://editor/?File=D:\wy\codes\loucomp\CGEN.C&Line=171">171</a><br>
+<b>Violation Number</b> : 6 - Recursion in procedure calls found. &nbsp;&nbsp;&nbsp; <b>Location</b>  : <a href = 'example.rps.htm#codeGen_CGEN.C_CGEN.C_4' onBlur='if (CHECK_BOXLL.checked) window.focus();return;' onClick='return targetopener(this)'>codeGen</a> - <a href="ldra://editor/?File=D:\wy\codes\loucomp\CGEN.C&Line=196">196</a><br>
+<b>Violation Number</b> : 6 - Recursion in procedure calls found. &nbsp;&nbsp;&nbsp; <b>Location</b>  : <a href = 'example.rps.htm#stmt_sequence_PARSE.C_PARSE.C_3' onBlur='if (CHECK_BOXLL.checked) window.focus();return;' onClick='return targetopener(this)'>stmt_sequence</a> - <a href="ldra://editor/?File=D:\wy\codes\loucomp\PARSE.C&Line=43">43</a><br>
+<b>Violation Number</b> : 6 - Recursion in procedure calls found. &nbsp;&nbsp;&nbsp; <b>Location</b>  : <a href = 'example.rps.htm#statement_PARSE.C_PARSE.C_4' onBlur='if (CHECK_BOXLL.checked) window.focus();return;' onClick='return targetopener(this)'>statement</a> - <a href="ldra://editor/?File=D:\wy\codes\loucomp\PARSE.C&Line=62">62</a><br>
+<b>Violation Number</b> : 6 - Recursion in procedure calls found. &nbsp;&nbsp;&nbsp; <b>Location</b>  : <a href = 'example.rps.htm#if_stmt_PARSE.C_PARSE.C_5' onBlur='if (CHECK_BOXLL.checked) window.focus();return;' onClick='return targetopener(this)'>if_stmt</a> - <a href="ldra://editor/?File=D:\wy\codes\loucomp\PARSE.C&Line=78">78</a><br>
+<b>Violation Number</b> : 6 - Recursion in procedure calls found. &nbsp;&nbsp;&nbsp; <b>Location</b>  : <a href = 'example.rps.htm#repeat_stmt_PARSE.C_PARSE.C_6' onBlur='if (CHECK_BOXLL.checked) window.focus();return;' onClick='return targetopener(this)'>repeat_stmt</a> - <a href="ldra://editor/?File=D:\wy\codes\loucomp\PARSE.C&Line=92">92</a><br>
+<b>Violation Number</b> : 6 - Recursion in procedure calls found. &nbsp;&nbsp;&nbsp; <b>Location</b>  : <a href = 'example.rps.htm#assign_stmt_PARSE.C_PARSE.C_7' onBlur='if (CHECK_BOXLL.checked) window.focus();return;' onClick='return targetopener(this)'>assign_stmt</a> - <a href="ldra://editor/?File=D:\wy\codes\loucomp\PARSE.C&Line=101">101</a><br>
+<b>Violation Number</b> : 6 - Recursion in procedure calls found. &nbsp;&nbsp;&nbsp; <b>Location</b>  : <a href = 'example.rps.htm#write_stmt_PARSE.C_PARSE.C_9' onBlur='if (CHECK_BOXLL.checked) window.focus();return;' onClick='return targetopener(this)'>write_stmt</a> - <a href="ldra://editor/?File=D:\wy\codes\loucomp\PARSE.C&Line=120">120</a><br>
+<b>Violation Number</b> : 6 - Recursion in procedure calls found. &nbsp;&nbsp;&nbsp; <b>Location</b>  : <a href = 'example.rps.htm#exp_PARSE.C_PARSE.C_10' onBlur='if (CHECK_BOXLL.checked) window.focus();return;' onClick='return targetopener(this)'>exp</a> - <a href="ldra://editor/?File=D:\wy\codes\loucomp\PARSE.C&Line=127">127</a><br>
+<b>Violation Number</b> : 6 - Recursion in procedure calls found. &nbsp;&nbsp;&nbsp; <b>Location</b>  : <a href = 'example.rps.htm#simple_exp_PARSE.C_PARSE.C_11' onBlur='if (CHECK_BOXLL.checked) window.focus();return;' onClick='return targetopener(this)'>simple_exp</a> - <a href="ldra://editor/?File=D:\wy\codes\loucomp\PARSE.C&Line=143">143</a><br>
+<b>Violation Number</b> : 6 - Recursion in procedure calls found. &nbsp;&nbsp;&nbsp; <b>Location</b>  : <a href = 'example.rps.htm#term_PARSE.C_PARSE.C_12' onBlur='if (CHECK_BOXLL.checked) window.focus();return;' onClick='return targetopener(this)'>term</a> - <a href="ldra://editor/?File=D:\wy\codes\loucomp\PARSE.C&Line=158">158</a><br>
+<b>Violation Number</b> : 6 - Recursion in procedure calls found. &nbsp;&nbsp;&nbsp; <b>Location</b>  : <a href = 'example.rps.htm#factor_PARSE.C_PARSE.C_13' onBlur='if (CHECK_BOXLL.checked) window.focus();return;' onClick='return targetopener(this)'>factor</a> - <a href="ldra://editor/?File=D:\wy\codes\loucomp\PARSE.C&Line=173">173</a><br>
+<b>Violation Number</b> : 6 - Recursion in procedure calls found. &nbsp;&nbsp;&nbsp; <b>Location</b>  : <a href = 'example.rps.htm#parse_PARSE.C_PARSE.C_14' onBlur='if (CHECK_BOXLL.checked) window.focus();return;' onClick='return targetopener(this)'>parse</a> - <a href="ldra://editor/?File=D:\wy\codes\loucomp\PARSE.C&Line=208">208</a><br>
+<b>Violation Number</b> : 6 - Recursion in procedure calls found. &nbsp;&nbsp;&nbsp; <b>Location</b>  : <a href = 'example.rps.htm#printTree_UTIL.C_UTIL.C_6' onBlur='if (CHECK_BOXLL.checked) window.focus();return;' onClick='return targetopener(this)'>printTree</a> - <a href="ldra://editor/?File=D:\wy\codes\loucomp\UTIL.C&Line=127">127</a><br>
+
+</BODY>
+</HTML>
+
+</BODY>
+</HTML>

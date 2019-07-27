@@ -1,0 +1,152 @@
+
+ # Begin Testbed Set
+
+ SET_TYPE = SYSTEM
+ SET_NAME = example
+ GENERATED_BY = Testbed 9.7.5
+ HOSTNAME = PC-201902222109
+
+    # Begin Source Files
+
+    File = C:\Users\Administrator\Desktop\muduo\base\AsyncLogging.cpp
+    UNCFile = \\PC-201902222109\C\Users\Administrator\Desktop\muduo\base\AsyncLogging.cpp
+    File = D:\wy\codes\loucomp\ANALYZE.C
+    UNCFile = \\PC-201902222109\D\wy\codes\loucomp\ANALYZE.C
+    File = D:\wy\codes\loucomp\CGEN.C
+    UNCFile = \\PC-201902222109\D\wy\codes\loucomp\CGEN.C
+    File = D:\wy\codes\loucomp\CODE.C
+    UNCFile = \\PC-201902222109\D\wy\codes\loucomp\CODE.C
+    File = D:\wy\codes\loucomp\MAIN.C
+    UNCFile = \\PC-201902222109\D\wy\codes\loucomp\MAIN.C
+    File = D:\wy\codes\loucomp\PARSE.C
+    UNCFile = \\PC-201902222109\D\wy\codes\loucomp\PARSE.C
+    File = D:\wy\codes\loucomp\SCAN.C
+    UNCFile = \\PC-201902222109\D\wy\codes\loucomp\SCAN.C
+    File = D:\wy\codes\loucomp\SYMTAB.C
+    UNCFile = \\PC-201902222109\D\wy\codes\loucomp\SYMTAB.C
+    File = D:\wy\codes\loucomp\TM.C
+    UNCFile = \\PC-201902222109\D\wy\codes\loucomp\TM.C
+    File = D:\wy\codes\loucomp\UTIL.C
+    UNCFile = \\PC-201902222109\D\wy\codes\loucomp\UTIL.C
+
+    # End Source Files
+
+    # Begin Sysearch Include File Entries
+
+
+    # End Sysearch Include File Entries
+
+    # Begin Sysppvar Preprocessor Macros
+
+
+    # End Sysppvar Preprocessor Macros
+
+    # Begin Options
+
+    set_attributes = 2 1 1 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+    nb_mechanism = build
+    nb_start_in_dir = C:\Users\Administrator\Desktop\muduo\base\
+    nb_build_command = cl "$$h.$$e" /Fe"$$i$$x$$g"
+    nb_compile_command = cl /c "$$d$$f.$$e"
+    nb_link_command = link /out:"$$i$$x$$g" "$$h.obj"
+    nb_ide_command = devenv.exe "$(Solution)"
+    nb_makefile_command = nmake /f "$(Makefile)" $(MakeGoal) $(MakeArgs)
+    nb_makefile_name = example.mak
+    nb_compile_each_file = T
+    nb_build_each_file = F
+    nb_makefile_in_start_in_dir = T
+    nb_proj_nmake_command =  
+    nb_proj_nmake_file =  
+    nb_proj_msdev_command =  
+    nb_proj_msdev_file =  
+    nb_projfile_in_start_in_dir = T
+    nb_proj_makefile_in_start_in_dir = T
+    nb_remove_pch = F
+    nb_substitute_source = F
+    sub_unused_files = F
+    nb_pipe = T
+    nb_force_console = 2
+    enable_pre_build = 0
+    enable_post_build = 0
+    make_greenhills_bld = 0
+    set_property = 1
+    nb_harness = "$$i$$x$$g"
+    nb_executepath = $(Userdir)
+    nb_execute_each_file = F
+    nb_pipe_exec = F
+    exhdir = $(Userdir)
+    modinst_exh_stem = $(SourceStem)_$(Modnum)
+    using_exhstrip = F
+    using_validexh = T
+    single_set_exh = F
+    compress_exh = F
+    threaded_exh = F
+    memory_address_exh = F
+    compress_exh_method = bitmap
+    do178b_instr = T
+    tbcapture_instr = F
+    array_bounds_check = F
+    copy_ref_instr = 0
+    archive_exh = T
+    force_dynsplit = T
+    dyn_scan_option = 6
+    dyn_scan_custom_coverage = 5 60 100 100 60 100
+    dyn_scan_current_coverage = 5 60 100 100 60 100
+    dyn_scan_html = T
+    dyn_oview_sort = 0
+    dyn_oview_options_changed = 0
+    dyn_oview_file_by_file = 0
+    dyn_oview_files_table = 0
+    syntax_only = F
+    include = T
+    open_all_includes = F
+    last_complexity_choice = 0
+    shorten = T
+    tbset_data_file = tbset.dat
+    workdir = $(WorkAreadir)example_tbwrkfls\
+    y2k_text_format = 1
+    y2k_column_width = 80
+    ddf_text_format = 1
+    ddf_column_width = 80
+    iprog = inszt_$$o
+    iext = $$t
+    idir = <Default>\
+    exe_name = $$s
+    exe_append = .exe
+    cinstr_data_file = <Default>
+    cppinstr_data_file = <Default>
+    cpenfile = <Default>
+    cpppenfile = <Default>
+    cvalsfile = <Default>
+    cppvalsfile = <Default>
+    cglbfile = <Default>
+    cppglbfile = <Default>
+    cstandards_model = GJB_8114
+    cexternal_standard = GJB_8114
+    c_dialect = DNET
+    c_dialect = DNET12
+    cppstandards_model = GJB_8114
+    cppexternal_standard = GJB_8114
+    cpp_dialect = DNET
+    cpp_dialect = DNET12
+    application_accessed = Testbed
+    sysearch = <Default search - Source dir(s) - Installdir>
+    sysppvar = <Default search - Source dir(s) - Installdir>
+    dynamic_run_number = 1
+    history = 10
+    coverage = 3
+    exhwidth = 0
+    logging = F
+    thisdir = F
+    forcedataflow = T
+    dosnames = F
+    scanondemand = T
+    iprog_switch_os_format = F
+    iprog_flush_exh = F
+    preprocess_iprog = T
+    instr_template_io = F
+    current_compiler = Microsoft Visual Studio 2017 Enterprise (x64 Target)
+
+    # End Options
+
+ # End Testbed Set
