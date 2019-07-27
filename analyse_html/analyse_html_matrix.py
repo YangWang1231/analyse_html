@@ -24,8 +24,9 @@
 所有的度量信息都是以.c文件为单位，用JSON描述这些信息.
 以code.c为例：
 {
-    file name : string ,
-    1.  reformatted code information for file : (<a id="reformatted code information for file">Reformatted Code Information for File (TM.C)</a>)
+    1.file name : string ,
+
+    2.reformatted code information for file : (<a id="reformatted code information for file">Reformatted Code Information for File (TM.C)</a>)
     {
         total lines : int
         totalcomments : int
@@ -34,18 +35,18 @@
         number of procedures : int (模块信息表项)
      },
 
-    2. complexity metrics :  (<a id="complexity metrics">Complexity Metrics (UTIL.C)</a>)
+    3. complexity metrics :  (<a id="complexity metrics">Complexity Metrics (UTIL.C)</a>)
     [
-        { function name : string ,   Cyclomatic information :  int },
-        { function name : string ,   Cyclomatic information :  int },
-        { function name : string ,   Cyclomatic information :  int }
+        { Cyclomatic information :  int , function name : string },
+        { Cyclomatic information :  int , function name : string },
+        { Cyclomatic information :  int , function name : string }
     ],
 
-    3. dataflow information:   (<a id="dataflow information">Dataflow Information (UTIL.C)</a> )
+    4. dataflow information:   (<a id="dataflow information">Dataflow Information (UTIL.C)</a> )
     [
-        {       function name : string,      fan out number : int    },
-        {       function name : string,      fan out number : int    },
-        {       function name : string,      fan out number : int    },
+        {       fan out number : int,   function name : string       },
+        {       fan out number : int,   function name : string       },
+        {       fan out number : int,   function name : string       }
     ]
 }
 
@@ -205,11 +206,40 @@ class process_metrix_repot(object):
     def trans_to_JSON(self):
             """
             将metrix_report转换为JSON对象
+            复杂对象如何转换成JSON :
+            seri_json = json.dumps(v, default=lambda x : x.__dict__)
+            {
+	            "filename": "CGEN.C"
+	            "reformated_code_information": 
+		            {
+			            "total_line_number": 689, 
+			            "total_comments_number": 182, 
+			            "Non_executeable_lines": 250, 
+			            "executeable_ref_lines": 257, 
+			            "number_of_procedure": 4
+		            }, 
+	            "complexity_metrics": 
+		            [
+			            {"Cyclomatic_information": 12, "function_name": "genStmt"}, 
+			            {"Cyclomatic_information": 16, "function_name": "genExp"}, 
+			            {"Cyclomatic_information": 4, "function_name": "cGen"}, 
+			            {"Cyclomatic_information": 1, "function_name": "codeGen"}
+		            ], 
+	            "fanout_info": 
+		            [
+			            {"fanout": 9, "function_name": "genStmt"}, 
+			            {"fanout": 5, "function_name": "genExp"}, 
+			            {"fanout": 3, "function_name": "cGen"}, 
+			            {"fanout": 8, "function_name": "codeGen"}
+		            ], 
+            }
             """
-            for k, v in self.total_info_dict.iteritems():
-                jobj = json.dumps(v.__dict__)
-            
-            pass
+            with open("seri_to_json.dat", "w") as writefile:
+                for k, v in self.total_info_dict.iteritems():
+                    seri_json = json.dumps(v, default=lambda x : x.__dict__)
+                    #debug
+                    writefile.write("%s\n" % seri_json)
+            return
 
     def analyse_html(self,file_url):
             """
