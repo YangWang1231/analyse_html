@@ -56,6 +56,26 @@ create table rule_obey_info(
     foreign key(LDRA_Code) references LDRA_rule(LDRACode) 
     );
 
+create table source_file_info(
+    id                 integer primary key autoincrement,
+    projectid          integer not null,
+    sourcefilename     text not null,
+    total_lines        integer not null,
+    total_comments     integer not null,
+    executeable_lines  integer not null,
+    number_of_procedure  integer not null,
+    foreign key(projectid) references projects(id)
+);
+
+create table complextity_metrics_info(
+    id                 integer primary key autoincrement,
+    file_id            integer not null,
+    funtion_name       text not null,
+    cyclomatic         int not null,
+    fan_out            int not null,
+    foreign key(file_id) references source_file_info(id)
+);
+
 /*描述testbed规则的基本情况，目前仅包含强制类规则*/    
 /*
 create table LDRA_rule(

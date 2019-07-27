@@ -2,6 +2,7 @@
  #coding:utf-8
 """
  analyse_html_matrix.py主要作用是获取testbed分析出的质量度量结果，作为生成word报告的数据素材
+ 最终生成一个Json对象
 
  输出：
  模块总数： function total number
@@ -239,6 +240,9 @@ class process_metrix_repot(object):
                     seri_json = json.dumps(v, default=lambda x : x.__dict__)
                     #debug
                     writefile.write("%s\n" % seri_json)
+                    decode_obj = json.loads(seri_json)
+                    x = metrix_report()
+                    x.__dict__ = decode_obj
             return
 
     def analyse_html(self,file_url):
