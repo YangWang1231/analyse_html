@@ -12,7 +12,7 @@ and insert data into three tables:
 
 from openpyxl import load_workbook
 from store_db_sqlit3 import process_db
-
+import re
 #a lot of repeat pattern, etc open db, load workbook, read sheet, iterate sheet, process row data
 #so may be a decorated pattern should be used.
 
@@ -20,7 +20,8 @@ from store_db_sqlit3 import process_db
 rule_translate_chines = u'gjb8114 rule in chinese.xlsx'
 translate_sheet = u'chinese-explainsion'
 def fill_8114_chineses():
-    db_obj = process_db()
+    db_obj = process_db(r'C:\Users\Administrator\Documents\code\project_from_github\analyse_html\analyse_html\flasker.sqlit')
+   #db_obj.init_db()
 
     wb = load_workbook(rule_translate_chines)
     ws = wb[translate_sheet]
@@ -30,9 +31,12 @@ def fill_8114_chineses():
         print(row)
         rule_ches_string = row
         #split rule-chinese pair, regex pattern
-        match_rule_string = 'R-\d-\d-\d' #匹配规则
+        match_rule_string = u'R-\d-\d-\d' #匹配规则
         
-
+        regex_rule = re.compile(match_rule_string)
+        for e in regex_rule.finditer(row):
+            rule, chinese = row[e.start() : e.end()], row[e.end() : ]
+            print(rule, chinese)
 
 #表格LDRA973-support-Gjb8114.xlsx的GJB8114-rule-details保存了对应关系
 rule_xlsx_file_name = 'LDRA973-support-Gjb8114.xlsx'

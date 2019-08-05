@@ -5,6 +5,9 @@ from    analyse_html_rule import violations_info,  rule_reports, violations_info
 import sqlite3
 from    sqlite3 import Error
 
+
+
+
 class process_db(object):
     def __init__(self, db_path=r'C:\Users\Administrator\source\repos\FlaskWebProject3\FlaskWebProject3\instance\flaskr.sqlite'):
         self.db_url = db_path
@@ -13,6 +16,10 @@ class process_db(object):
         if self.db_conn == None:
             pass    #error process
 
+    def init_db(self):
+        with open('create_tables.sql',mode = 'r') as f:
+            self.db_conn.cursor().executescript(f.read())
+        self.db_conn.commit()
     
     def commit(self)  :
         self.db_conn.commit()
@@ -30,7 +37,7 @@ class process_db(object):
 #        self.mandatory_std = man_std
 #        self.standard_code = std_code
 #        self.detail_dict = detail_dict
-    def store_to_db(self, rule_report):
+    def store_rule_repot_to_db(self, rule_report):
         """将一个软件的testbed规则分析结果存入DB
         :param rule_report: a object of class rule_reports
         """
@@ -45,7 +52,8 @@ class process_db(object):
         self.commit()
         return 
 
-
+    def store_metrix_report_to_db(self, metrix_repot):
+        return
 
     def insert_rule_obey_info(self, obey_info):
         cur = self.db_conn.cursor()
@@ -176,9 +184,15 @@ class process_db(object):
         return
 
 
+from analyse_html_matrix import dev_location
+
 if __name__ == '__main__':
     #analyse html
-    html = u"file:///C:/LDRA_Workarea/example_tbwrkfls/example.rps.htm"
+    if dev_location == 'home':
+        html = u"file:///C:/Users/Administrator/Documents/code/project_from_github/analyse_html/example_tbwrkfls/example.rps.htm"
+    else:
+        html = u"file:///C:/LDRA_Workarea/example_tbwrkfls/example.rps.htm"
+
     report = rule_reports()
     report.analyse_html(html)
 
@@ -186,7 +200,7 @@ if __name__ == '__main__':
     db_obj = process_db()
     db_obj.init_db_for_debug()
     #userid , proid = db_obj.get_userid_projectid()
-    db_obj.store_to_db(report)
+    db_obj.store_rule_repot_to_db(report)
 
 
 

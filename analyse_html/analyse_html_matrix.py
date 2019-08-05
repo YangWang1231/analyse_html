@@ -119,6 +119,7 @@ class process_metrix_repot(object):
         self.bsObj = None
         self.match_digital_string = '\d+\.?\d*' #匹配数字
         self.match_file_name = '\([^()]*\)'    #匹配括号内源文件名称
+        self.total_info_dict = {} #filename , metrix_report class instance
 
 
     def get_reformated_info(self, content_table):
@@ -268,7 +269,6 @@ class process_metrix_repot(object):
             self.bsObj = BeautifulSoup(self.html.read(), features="html.parser") 
             self.script_regex = re.compile(self.match_digital_string)
             self.filename_regex = re.compile(self.match_file_name)
-            self.total_info_dict = {} #filename , metrix_report class instance
 
 
             #process all reformatted code information
@@ -362,10 +362,14 @@ class process_metrix_repot(object):
                     
 
 
-
+dev_location = 'home'
 
 if __name__ == '__main__':
-    html = u"file:///C:/LDRA_Workarea/example_tbwrkfls/example.mts.htm"
+    if dev_location == 'home':
+        html = u"file:///C:/Users/Administrator/Documents/code/project_from_github/analyse_html/example_tbwrkfls/example.mts.htm"
+    else:
+        html = u"file:///C:/LDRA_Workarea/example_tbwrkfls/example.mts.htm"
+
     report = process_metrix_repot()
     report.analyse_html(html)
     report.trans_to_JSON()
