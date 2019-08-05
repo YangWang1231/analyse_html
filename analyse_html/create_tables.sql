@@ -16,16 +16,18 @@ create table projects(
 );
 
 
-
+/*
+建立8114与testbed规则的对应表格，该表格建立一次之后就不需要再改，除非使用了新版的testbed，对于8114有了更好的支持
+*/
 create table GBJ8114_rule(
     id integer primary key autoincrement,
-    GJB8114Code text unique,
-    Rule_description text not null,
-    MandatoryStandard_ch text,    
+    GJB8114Code text unique,                /*A-1-1-1*/
+    Rule_description text not null,         /*A typedef should be used instead of a basic type.*/
+    MandatoryStandard_ch text,              /*中文翻译，需要从excel里面找到对应*/
     /*should be enum (recommended, mandatory), but sqlite has no enum support, 
     this table has to trans another statement when switch to mysql DB engine.
     */
-    Rule_classification text check (Rule_classification IN ('RECOMMENDED','MANDATORY', '') )        
+    Rule_classification text check (Rule_classification IN ('RECOMMENDED','MANDATORY', '') )        /*type of rule: 'recommanded', 'mandatory'*/
 );
         
 create table LDRA_rule(
