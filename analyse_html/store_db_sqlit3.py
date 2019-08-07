@@ -95,6 +95,12 @@ class process_db(object):
         cur.execute(sql, ldra_rule)
         return cur.lastrowid
 
+    def update_GJB8114_chinese(self, GJB8114_chinese,):
+        cur = self.db_conn.cursor()
+        sql = '''update GBJ8114_rule set MandatoryStandard_ch = ? where GJB8114Code = ?'''
+        cur.execute(sql, GJB8114_chinese)
+        return cur.lastrowid
+
     def insert_GJB8114_rule(self, GJB8114_rule)  :
         cur = self.db_conn.cursor()
         sql = '''insert into GBJ8114_rule(GJB8114Code,  Rule_description, MandatoryStandard_ch, Rule_classification)

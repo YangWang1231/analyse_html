@@ -1,0 +1,13 @@
+{
+  "work_location": "thinkpad",
+  "DB_name": "flaskr-backup.sqlite",
+  "DB_location": "D:\\wy\\codes\\analyse_html\\analyse_html\\",
+  "LDRA-support-Gjb8114": {
+    "filename": "LDRA973-support-Gjb8114.xlsx",
+    "sheetname": "GJB8114-rule-details"
+  },
+  "gjb8114 rule in chinese": {
+    "filename": "gjb8114 rule in chinese.xlsx",
+    "sheetname": "chinese-explainsion"
+  }
+}

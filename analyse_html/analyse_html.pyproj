@@ -26,6 +26,9 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="analyse_html_rule.py" />
+    <Compile Include="config.py">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="make_LDRA_rule_table.py">
       <SubType>Code</SubType>
     </Compile>
@@ -48,6 +51,9 @@
     </Interpreter>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="config.json">
+      <SubType>Code</SubType>
+    </Content>
     <Content Include="create_tables.sql" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\Python Tools\Microsoft.PythonTools.targets" />
