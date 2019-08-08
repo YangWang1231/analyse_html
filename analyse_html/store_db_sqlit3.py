@@ -1,7 +1,6 @@
 #!/usr/bin/python
  #coding:utf-8
 
-#from    analyse_html_rule import rule_reports
 import sqlite3
 from    sqlite3 import Error
 
