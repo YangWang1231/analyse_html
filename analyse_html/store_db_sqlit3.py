@@ -24,37 +24,6 @@ class process_db(object):
     def commit(self)  :
         self.db_conn.commit()
 
-##存储分析结果表格信息的类，包含以下四类信息
-#class rule_table_row(object):
-#    #violation_num = 0 Number of Violations
-#    #LDRA_code = '' #LDRA Code
-#    #mandatory_std = '' #Mandatory Standards
-#    #standard_code = '' #GJB_8114 Code
-#     #detail_list #rule obey details
-#    def __init__(self, v_num, l_code, man_std, std_code, detail_dict):
-#        self.violation_num = v_num
-#        self.LDRA_code = l_code
-#        self.mandatory_std = man_std
-#        self.standard_code = std_code
-#        self.detail_dict = detail_dict
-    #def store_rule_repot_to_db(self, rule_report):
-    #    """将一个软件的testbed规则分析结果存入DB
-    #    :param rule_report: a object of class rule_reports
-    #    """
-    #    userid , proid = self.get_userid_projectid()
-    #    for row in rule_report.rule_results():
-    #        LDRA_code = row.LDRA_code
-    #        for functionname, err_list in row.detail_dict.iteritems():
-    #            line_str = ','.join(str(e) for e in err_list)
-    #            rule_obey_item = (proid, LDRA_code, functionname, line_str)
-    #            self.insert_rule_obey_info(rule_obey_item)
-
-    #    self.commit()
-    #    return 
-
-    def store_metrix_report_to_db(self, metrix_repot):
-        return
-
     def insert_rule_obey_info(self, obey_info):
         cur = self.db_conn.cursor()
         sql = '''insert into rule_obey_info(projectid,  LDRA_Code, location_function, line_numbers)
@@ -150,9 +119,6 @@ class process_db(object):
         cur.execute(sql, user)
         return cur.lastrowid
 
-
-        
-
     def get_userid_projectid(self):
         '''
         仅调试用
@@ -171,9 +137,9 @@ class process_db(object):
 
         return (userid, projectid)
 
-    def execute_sql_stm(self, sql_stm):
+    def execute_sql_stm(self, *sql_stm):
         cur = self.db_conn.cursor()
-        cur.execute(sql_stm)
+        cur.execute(*sql_stm)
         self.commit()
         return 
 

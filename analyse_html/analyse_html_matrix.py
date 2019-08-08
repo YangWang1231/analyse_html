@@ -112,8 +112,32 @@ class metrix_report(object):
         self.fanout_info = [] #list of function fanout
         return 
 
-    
-    
+    def store_db(self, db_obj):
+        """将一个软件的testbed 度量分析结果存入DB
+        mainly fill two tables:
+        source_file_info:
+        complexity_metrics_info:
+        """
+        userid , proid = db_obj.get_userid_projectid()
+
+        #fill source_file_info table
+        row_tuple = (proid,  self.filename,  self.reformated_code_information.total_line_number,  self.reformated_code_information.total_comments_number , \
+                    self.reformated_code_information.executeable_ref_lines , self.reformated_code_information.number_of_procedure )
+        file_id = db_obj.insert_LDRA_metrics(row_tuple)
+
+        #fill complexity_metrics_info table
+        for e in self.complexity_metrics:        
+            sql_str = '''insert into complextity_metrics_info (file_id,  funtion_name, cyclomatic, fan_out)
+                values (?,?,?,?) '''
+            sql_tuple = (file_id, e.function_name , e.Cyclomatic_information, '') 
+            db_obj.execute_sql_stm(sql_str, sql_tuple)
+        
+        for e in self.fanout_info:
+            sql_str = "update complextity_metrics_info set fan_out = ? where funtion_name = ?"
+            sql_tuple = (e.fanout , e.function_name)
+            db_obj.execute_sql_stm(sql_str, sql_tuple)
+
+        return
 
 class process_metrix_repot(object):
     def __init__(self):
@@ -124,7 +148,6 @@ class process_metrix_repot(object):
         self.match_file_name = '\([^()]*\)'    #匹配括号内源文件名称
         self.total_info_dict = {} #filename , metrix_report class instance
         self.seri_json = None
-        self.__Debug = _config_data['__debug']
 
 
     def get_reformated_info(self, content_table):
@@ -255,24 +278,19 @@ class process_metrix_repot(object):
                     x.__dict__ = decode_obj
             return
 
+
+
     def store_matrix_to_db(self, db_obj):
         """将一个软件的testbed 度量分析结果存入DB
-        mainly fill two tables:
-        source_file_info:
-        complexity_metrics_info:
         """
-        if self.__Debug == "true":
+        if _config_data['__debug'] == "true":
             db_obj.clear_table('source_file_info')
+            db_obj.clear_table("complextity_metrics_info")
 
-        userid , proid = db_obj.get_userid_projectid()
         for k, v in self.total_info_dict.iteritems():
-            row_tuple = (proid,  v.filename,  v.reformated_code_information.total_line_number,  v.reformated_code_information.total_comments_number , \
-                       v.reformated_code_information.executeable_ref_lines , v.reformated_code_information.number_of_procedure )
-            db_obj.insert_LDRA_metrics(row_tuple)
-        
-        
+            v.store_db(db_obj)
 
-        db_obj.commit()
+        db_obj.commit()    
         return         
 
     def analyse_html(self,file_url):
