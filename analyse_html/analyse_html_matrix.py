@@ -421,6 +421,9 @@ if __name__ == '__main__':
 
     report = process_metrix_repot()
     report.analyse_html(html)
+
+    #produce doc
+    
     #report.trans_to_JSON()
-    db_obj = process_db()
-    report.store_matrix_to_db(db_obj)
+    #db_obj = process_db()
+    #report.store_matrix_to_db(db_obj)

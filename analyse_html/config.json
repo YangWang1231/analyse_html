@@ -1,6 +1,6 @@
 {
-  "dev_location": "12S",
-  "__debug" :  "true",
+  "dev_location": "home",
+  "__debug": "true",
   "work_location": "thinkpad",
   "DB_name": "flaskr-backup.sqlite",
   "DB_location": "D:\\wy\\codes\\analyse_html\\analyse_html\\",

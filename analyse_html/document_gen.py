@@ -39,6 +39,10 @@ for qty, id, desc in records:
     row_cells[1].text = id
     row_cells[2].text = desc
 
+cell1,cell2 = table.cell(0,1) , table.cell(0,2) 
+cell1.merge(cell2)
+
+
 document.add_page_break()
 
 document.add_heading('another Document Title', 0)
