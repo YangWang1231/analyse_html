@@ -68,6 +68,9 @@ import re
 from    urllib import urlopen
 from    bs4 import BeautifulSoup
 import json
+from config import _config_data
+
+
 
 class reformated_code_information(object):
     def __init__(self, totaline=0, totalcomment=0, executeablelines=0, nonexecuteablelines=0, numberOfprocedure=0):
@@ -76,7 +79,7 @@ class reformated_code_information(object):
         self.executeable_ref_lines = executeablelines
         self.Non_executeable_lines = nonexecuteablelines 
         self.number_of_procedure = numberOfprocedure
-    
+            
     def __str__(self):
         str_output = "{}  {}  {} {} {}".format(self.total_line_number, self.total_comments_number, self.executeable_ref_lines, self.Non_executeable_lines, self.number_of_procedure)
         return str_output
@@ -120,6 +123,8 @@ class process_metrix_repot(object):
         self.match_digital_string = '\d+\.?\d*' #匹配数字
         self.match_file_name = '\([^()]*\)'    #匹配括号内源文件名称
         self.total_info_dict = {} #filename , metrix_report class instance
+        self.seri_json = None
+        self.__Debug = _config_data['__debug']
 
 
     def get_reformated_info(self, content_table):
@@ -196,6 +201,7 @@ class process_metrix_repot(object):
         return data_flow_list
 
 
+
     def extract_file_name(self, reformat_tag):
         """
         从tag中获取源文件名称
@@ -208,8 +214,8 @@ class process_metrix_repot(object):
     def trans_to_JSON(self):
             """
             将metrix_report转换为JSON对象
-            复杂对象如何转换成JSON :
-            seri_json = json.dumps(v, default=lambda x : x.__dict__)
+            复杂对象如何转换成JSON :        seri_json = json.dumps(v, default=lambda x : x.__dict__)
+            对象格式：
             {
 	            "filename": "CGEN.C"
 	            "reformated_code_information": 
@@ -236,15 +242,38 @@ class process_metrix_repot(object):
 		            ], 
             }
             """
+            if self.seri_json is not None:
+                return self.seri_json
+
             with open("seri_to_json.dat", "w") as writefile:
                 for k, v in self.total_info_dict.iteritems():
-                    seri_json = json.dumps(v, default=lambda x : x.__dict__)
+                    self.seri_json = json.dumps(v, default=lambda x : x.__dict__)
                     #debug
                     writefile.write("%s\n" % seri_json)
                     decode_obj = json.loads(seri_json)
                     x = metrix_report()
                     x.__dict__ = decode_obj
             return
+
+    def store_matrix_to_db(self, db_obj):
+        """将一个软件的testbed 度量分析结果存入DB
+        mainly fill two tables:
+        source_file_info:
+        complexity_metrics_info:
+        """
+        if self.__Debug == "true":
+            db_obj.clear_table('source_file_info')
+
+        userid , proid = db_obj.get_userid_projectid()
+        for k, v in self.total_info_dict.iteritems():
+            row_tuple = (proid,  v.filename,  v.reformated_code_information.total_line_number,  v.reformated_code_information.total_comments_number , \
+                       v.reformated_code_information.executeable_ref_lines , v.reformated_code_information.number_of_procedure )
+            db_obj.insert_LDRA_metrics(row_tuple)
+        
+        
+
+        db_obj.commit()
+        return         
 
     def analyse_html(self,file_url):
             """
@@ -257,7 +286,7 @@ class process_metrix_repot(object):
        
             Returns:
                 如果这个文件包含规则违背情况，则返回详细情况的list
-                如果这个文件包含规则违背情况，则返回空表
+                如果这个文件不包含规则违背情况，则返回空表
             方法：
                 从每个文件中依次查找
                 <a id="reformatted code information for file">Reformatted Code Information for File (TM.C)</a>
@@ -269,7 +298,6 @@ class process_metrix_repot(object):
             self.bsObj = BeautifulSoup(self.html.read(), features="html.parser") 
             self.script_regex = re.compile(self.match_digital_string)
             self.filename_regex = re.compile(self.match_file_name)
-
 
             #process all reformatted code information
             #list of reformated_code_information class instance
@@ -360,11 +388,14 @@ class process_metrix_repot(object):
                             break
             return
                     
+from store_db_sqlit3 import process_db
+from config import _config_data
 
-
-dev_location = 'home'
 
 if __name__ == '__main__':
+    
+    dev_location = _config_data['dev_location']
+
     if dev_location == 'home':
         html = u"file:///C:/Users/Administrator/Documents/code/project_from_github/analyse_html/example_tbwrkfls/example.mts.htm"
     else:
@@ -372,4 +403,6 @@ if __name__ == '__main__':
 
     report = process_metrix_repot()
     report.analyse_html(html)
-    report.trans_to_JSON()
+    #report.trans_to_JSON()
+    db_obj = process_db()
+    report.store_matrix_to_db(db_obj)

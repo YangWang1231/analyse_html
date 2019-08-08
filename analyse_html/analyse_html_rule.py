@@ -93,7 +93,34 @@ class rule_reports(object):
         """
         for row in self.result_list:
             yield row
-        
+
+##存储分析结果表格信息的类，包含以下四类信息
+#class rule_table_row(object):
+#    #violation_num = 0 Number of Violations
+#    #LDRA_code = '' #LDRA Code
+#    #mandatory_std = '' #Mandatory Standards
+#    #standard_code = '' #GJB_8114 Code
+#     #detail_list #rule obey details
+#    def __init__(self, v_num, l_code, man_std, std_code, detail_dict):
+#        self.violation_num = v_num
+#        self.LDRA_code = l_code
+#        self.mandatory_std = man_std
+#        self.standard_code = std_code
+#        self.detail_dict = detail_dict
+    def store_rule_repot_to_db(self, db_obj):
+        """将一个软件的testbed规则分析结果存入DB
+        :param rule_report: a object of class rule_reports
+        """
+        userid , proid = db_obj.get_userid_projectid()
+        for row in self.rule_results():
+            LDRA_code = row.LDRA_code
+            for functionname, err_list in row.detail_dict.iteritems():
+                line_str = ','.join(str(e) for e in err_list)
+                rule_obey_item = (proid, LDRA_code, functionname, line_str)
+                db_obj.insert_rule_obey_info(rule_obey_item)
+
+        db_obj.commit()
+        return         
         
     #脚本文件主函数
     #处理一个htlm文件
@@ -205,9 +232,12 @@ class rule_reports(object):
             return standard_rule_number_string 
 
 
-
+from store_db_sqlit3 import process_db
 
 if __name__ == "__main__":
     html = u"file:///C:/LDRA_Workarea/example_tbwrkfls/example.rps.htm"
     report = rule_reports()
     report.analyse_html(html)
+
+    db_obj = process_db()
+    report.store_rule_repot_to_db(db_obj)

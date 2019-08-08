@@ -16,7 +16,7 @@ PS.程序中应该有一个地方保存全局设置，可以参考flask
 from openpyxl import load_workbook
 from store_db_sqlit3 import process_db
 import re
-from config import get_config
+from config import _config_data
 #a lot of repeat pattern, etc open db, load workbook, read sheet, iterate sheet, process row data
 #so may be a decorated pattern should be used.
 
@@ -25,8 +25,8 @@ from config import get_config
 
 
 def fill_8114_chineses():
-    config_data = get_config()
-    db_path = config_data['DB_location'] + config_data['DB_name']
+    
+    db_path = _config_data['DB_location'] + _config_data['DB_name']
     db_obj = process_db(db_path)
 
    #db_obj.init_db()
@@ -62,8 +62,8 @@ def build_LDRA_rule_table():
     fill GJB_8114_rule, LDRA_rul, GJB_LDRA_relation_table
     """
 #    db_obj = process_db()
-    config_data = get_config()
-    db_path = config_data['DB_location'] + config_data['DB_name']
+    
+    db_path = _config_data['DB_location'] + _config_data['DB_name']
     db_obj = process_db(db_path)
 
     rule_xlsx_file_name = config_data['LDRA-support-Gjb8114']['filename']

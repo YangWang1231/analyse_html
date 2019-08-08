@@ -4,7 +4,7 @@
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>4eeaa17f-2e95-480c-8417-8799fc0bfb95</ProjectGuid>
     <ProjectHome>.</ProjectHome>
-    <StartupFile>make_LDRA_rule_table.py</StartupFile>
+    <StartupFile>analyse_html_matrix.py</StartupFile>
     <SearchPath>
     </SearchPath>
     <WorkingDirectory>.</WorkingDirectory>
@@ -27,6 +27,9 @@
     </Compile>
     <Compile Include="analyse_html_rule.py" />
     <Compile Include="config.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="document_gen.py">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="make_LDRA_rule_table.py">

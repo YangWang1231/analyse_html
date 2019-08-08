@@ -1,7 +1,7 @@
 #!/usr/bin/python
  #coding:utf-8
 
-from    analyse_html_rule import violations_info,  rule_reports, violations_info
+#from    analyse_html_rule import rule_reports
 import sqlite3
 from    sqlite3 import Error
 
@@ -37,20 +37,20 @@ class process_db(object):
 #        self.mandatory_std = man_std
 #        self.standard_code = std_code
 #        self.detail_dict = detail_dict
-    def store_rule_repot_to_db(self, rule_report):
-        """将一个软件的testbed规则分析结果存入DB
-        :param rule_report: a object of class rule_reports
-        """
-        userid , proid = self.get_userid_projectid()
-        for row in rule_report.rule_results():
-            LDRA_code = row.LDRA_code
-            for functionname, err_list in row.detail_dict.iteritems():
-                line_str = ','.join(str(e) for e in err_list)
-                rule_obey_item = (proid, LDRA_code, functionname, line_str)
-                self.insert_rule_obey_info(rule_obey_item)
+    #def store_rule_repot_to_db(self, rule_report):
+    #    """将一个软件的testbed规则分析结果存入DB
+    #    :param rule_report: a object of class rule_reports
+    #    """
+    #    userid , proid = self.get_userid_projectid()
+    #    for row in rule_report.rule_results():
+    #        LDRA_code = row.LDRA_code
+    #        for functionname, err_list in row.detail_dict.iteritems():
+    #            line_str = ','.join(str(e) for e in err_list)
+    #            rule_obey_item = (proid, LDRA_code, functionname, line_str)
+    #            self.insert_rule_obey_info(rule_obey_item)
 
-        self.commit()
-        return 
+    #    self.commit()
+    #    return 
 
     def store_metrix_report_to_db(self, metrix_repot):
         return
@@ -86,7 +86,12 @@ class process_db(object):
         else:
             return None
 
-
+    def insert_LDRA_metrics(self, ldra_metrics)  :
+        cur = self.db_conn.cursor()
+        sql = '''insert into source_file_info(projectid,  sourcefilename, total_lines, total_comments, executeable_lines, number_of_procedure)
+                values (?,?,?,?,?,?) '''
+        cur.execute(sql, ldra_metrics)
+        return cur.lastrowid
 
     def insert_LDRA_rule(self, ldra_rule)  :
         cur = self.db_conn.cursor()
@@ -146,6 +151,8 @@ class process_db(object):
         return cur.lastrowid
 
 
+        
+
     def get_userid_projectid(self):
         '''
         仅调试用
@@ -164,7 +171,18 @@ class process_db(object):
 
         return (userid, projectid)
 
+    def execute_sql_stm(self, sql_stm):
+        cur = self.db_conn.cursor()
+        cur.execute(sql_stm)
+        self.commit()
+        return 
 
+    def clear_table(self, tablename):
+        sql_str = r"delete from %s" % tablename
+        self.execute_sql_stm(sql_str)
+        sql_str = r"update sqlite_sequence SET seq = 0 where name ='%s'" % tablename
+        self.execute_sql_stm(sql_str)
+        return 
 
     def init_db_for_debug(self):
         """
@@ -190,7 +208,9 @@ class process_db(object):
         return
 
 
-from analyse_html_matrix import dev_location
+#from analyse_html_matrix import dev_location
+from config import _config_data
+dev_location = _config_data['dev_location']
 
 if __name__ == '__main__':
     #analyse html
@@ -199,6 +219,7 @@ if __name__ == '__main__':
     else:
         html = u"file:///C:/LDRA_Workarea/example_tbwrkfls/example.rps.htm"
 
+    
     report = rule_reports()
     report.analyse_html(html)
 
