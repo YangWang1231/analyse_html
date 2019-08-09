@@ -1,0 +1,20 @@
+<a id="procedure information">Procedure Information (UTIL.C)</a>
+[(u'printToken', 61), (u'newStmtNode', 29), (u'newExpNode', 30), (u'copyString', 24), (u'printSpaces', 13), (u'printTree', 88)]
+<a id="procedure information">Procedure Information (TM.C)</a>
+[(u'opClass', 26), (u'writeInstruction', 29), (u'getCh', 13), (u'nonBlank', 29), (u'getNum', 63), (u'getWord', 26), (u'skipCh', 16), (u'atEOL', 6), (u'error', 12), (u'readInstructions', 344), (u'stepTM', 184), (u'doCommand', 320), (u'main', 47)]
+<a id="procedure information">Procedure Information (SYMTAB.C)</a>
+[(u'hash', 13), (u'st_insert', 46), (u'st_lookup', 32), (u'printSymTab', 38)]
+<a id="procedure information">Procedure Information (SCAN.C)</a>
+[(u'getNextChar', 37), (u'ungetNextChar', 9), (u'reservedLookup', 22), (u'getToken', 226)]
+<a id="procedure information">Procedure Information (PARSE.C)</a>
+[(u'syntaxError', 5), (u'match', 17), (u'stmt_sequence', 48), (u'statement', 36), (u'if_stmt', 46), (u'repeat_stmt', 26), (u'assign_stmt', 30), (u'read_stmt', 22), (u'write_stmt', 15), (u'exp', 37), (u'simple_exp', 31), (u'term', 31), (u'factor', 62), (u'parse', 16)]
+<a id="procedure information">Procedure Information (MAIN.C)</a>
+[(u'main', 89)]
+<a id="procedure information">Procedure Information (CODE.C)</a>
+[(u'emitComment', 9), (u'emitRO', 18), (u'emitRM', 18), (u'emitSkip', 11), (u'emitBackup', 12), (u'emitRestore', 3), (u'emitRM_Abs', 19)]
+<a id="procedure information">Procedure Information (CGEN.C)</a>
+[(u'genStmt', 108), (u'genExp', 104), (u'cGen', 28), (u'codeGen', 17)]
+<a id="procedure information">Procedure Information (ANALYZE.C)</a>
+[(u'traverse', 32), (u'nullProc', 15), (u'insertNode', 54), (u'buildSymtab', 15), (u'typeError', 4), (u'checkNode', 107), (u'typeCheck', 7)]
+<a id="procedure information">Procedure Information (AsyncLogging.cpp)</a>
+[(u'AsyncLogging::AsyncLogging', 5), (u'AsyncLogging::append', 27), (u'AsyncLogging::threadFunc', 121)]

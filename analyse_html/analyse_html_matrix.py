@@ -87,19 +87,19 @@ class reformated_code_information(object):
 
 
 class function_complexity(object):
-    #debug 
-    object_count = 12
     def __init__(self, fun_name = '' , cycl_info = 0):
         self.function_name = fun_name
         self.Cyclomatic_information = cycl_info
-        self.executeable_lines = function_complexity.object_count  
-        function_complexity.object_count  += 1 #后续需要用真实数据填充
 
 class function_fanout(object):
     def __init__(self, func_name = '', fout = 0):
         self.function_name = func_name
         self.fanout = fout
 
+class function_procedure_info(object):
+    def __init__(self, func_name, executable_lines):
+        self.executable_lines = executable_lines
+        self.function_name = func_name
 
 class metrix_report(object):
     """
@@ -110,13 +110,14 @@ class metrix_report(object):
         self.reformated_code_information = reformated_code_information()
         self.complexity_metrics = [] #list of function complexity
         self.fanout_info = [] #list of function fanout
+        self.func_procedure_info = [] #list of function procedure info
         return 
 
     def get_max_min_lines(self):
         """
         获取所有本文件最大/最小模块行号
         """
-        execute_lines = [e.executeable_lines for e in self.complexity_metrics]
+        execute_lines = [e.executable_lines for e in self.func_procedure_info]
         execute_lines.sort(reverse = True)
 
         return  execute_lines[0], execute_lines[-1]
@@ -131,11 +132,11 @@ class metrix_report(object):
         new_cells = source_line_table.add_row().cells
         new_cells[0].text = str(index)
         new_cells[1].text = self.filename
-        new_cells[2].text = str(self.reformated_code_information.total_line_number)
+        new_cells[2].text = str(self.reformated_code_information.executeable_ref_lines)
         #填写静态质量度量
         index = len(metrix_table.rows)
         new_cells = metrix_table.add_row().cells
-        (max_line, min_line )= self.get_max_min_lines()
+        (max_line, min_line)= self.get_max_min_lines()
         metrix_tuple = (str(index), self.filename, str(self.reformated_code_information.number_of_procedure), '/'.join(str(e)  for e in (max_line, min_line )))
         
         for i, e in enumerate(metrix_tuple):
@@ -252,6 +253,23 @@ class process_metrix_repot(object):
                 complextity_num = int(number_mattched[0])
                 comlextity_list.append((function_name , complextity_num ))
         return comlextity_list
+
+    def get_procedure_info(self, content_table):
+        tr_list = content_table.find_all('tr')
+        if len(tr_list) > 4:
+            tr_list = tr_list[3:-2] #前面3行是固定的无用内容，后面2行是无用的内容
+        else:
+            tr_list = tr_list[3:]
+
+        procedure_info_list= []
+        for tr in tr_list:
+            td_list = tr.find_all('td')
+            function_name , executeable_lines = td_list[0].string.strip(), td_list[1].string.strip()
+            number_mattched = self.script_regex.findall(executeable_lines)
+            if len(number_mattched) != 0: #testbed 报告每10个函数有一个空行
+                executeable_lines = int(number_mattched[0])
+                procedure_info_list.append((function_name , executeable_lines ))
+        return procedure_info_list
 
     def get_data_flow_info(self,  content_table):
         tr_list = content_table.find_all('tr')
@@ -381,6 +399,7 @@ class process_metrix_repot(object):
             方法：
                 从每个文件中依次查找
                 <a id="reformatted code information for file">Reformatted Code Information for File (TM.C)</a>
+                <a id="procedure information">Procedure Information (UTIL.C)</a>
                 <a id="complexity metrics">Complexity Metrics (UTIL.C)</a>
                 <a id="dataflow information">Dataflow Information (UTIL.C)</a>
             """
@@ -392,7 +411,6 @@ class process_metrix_repot(object):
 
             #process all reformatted code information
             #list of reformated_code_information class instance
-
             reformat_codelist = []
             reformat_title_list = self.bsObj.find_all(u'a', id = u'reformatted code information for file')
             with open("temp_reformatted_code_info.dat",'w') as write_file:
@@ -416,6 +434,33 @@ class process_metrix_repot(object):
                             #DEBUG
                             reformat_codelist.append(reformat_code_info)
                             write_file.write("%s\n" % reformat_code_info)
+                            write_file.flush()
+                            break
+
+            #process procedure information
+            procedure_info_list = []
+            procedure_title_list = self.bsObj.find_all(u'a', id = u'procedure information')
+            with open('temp_procedure_info.dat', 'w') as write_file:
+                for procedure_tag in procedure_title_list:
+                    #从tag的context获取filename
+                    filename = self.extract_file_name(procedure_tag)
+                    if filename in self.total_info_dict:
+                        one_file_info = self.total_info_dict[filename]
+
+                    write_file.write("%s\n" % procedure_tag)
+                    for e in procedure_tag.parent.next_siblings:
+                        if e.name == 'center':
+                            content_table = e.find_all('table')[1] #获取第二个table
+                            #获取第二个table中的tr
+                            procedure_info = self.get_procedure_info(content_table)
+                            for e in procedure_info:
+                                procedure = function_procedure_info(*e)
+                                one_file_info.func_procedure_info.append(procedure)
+                            
+                            #debug
+                            procedure_info_list.append(procedure_info)
+                            write_file.write("%s\n" % procedure_info)
+                            #write_file.write('%s\n' % content_table)
                             write_file.flush()
                             break
 
