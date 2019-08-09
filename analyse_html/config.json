@@ -1,5 +1,5 @@
 {
-  "dev_location": "12S",
+  "dev_location": "home",
   "__debug": "true",
   "work_location": "thinkpad",
   "DB_name": "flaskr-backup.sqlite",

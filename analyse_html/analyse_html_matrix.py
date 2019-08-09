@@ -147,17 +147,18 @@ class metrix_report(object):
         
         complexity_list = []
         for e in self.complexity_metrics:
-            row_list = [str(index), e.function_name, str(e.Cyclomatic_information)]
+            row_list = [index, e.function_name, e.Cyclomatic_information]
             for m in self.fanout_info:
                 if m.function_name == e.function_name:
-                    row_list.append(str(m.fanout))
-            complexity_list.append(row_list)
+                    row_list.append(m.fanout)
+            if row_list[2] > 10 or row_list[3] > 7:
+                complexity_list.append(row_list)
             index += 1
             
         for e in complexity_list:
             new_cells = complexity_fanout_table.add_row().cells
             for i, m in enumerate(e):
-                new_cells[i].text = m
+                new_cells[i].text = str(m)
         return
 
     def store_db(self, db_obj):
@@ -197,6 +198,19 @@ class process_metrix_repot(object):
         self.total_info_dict = {} #filename , metrix_report class instance
         self.seri_json = None
 
+    def get_info_from_content_table(self, content_table):
+        tr_list = content_table.find_all('tr')
+        if len(tr_list) > 4:
+            tr_list = tr_list[3:-2] #前面3行是固定的无用内容，后面2行是无用的内容
+        else:
+            tr_list = tr_list[3:]
+
+        content_list = []
+        for tr in tr_list:
+            td_list = tr.find_all('td')
+            tr_string = [s.string.strip() for s in td_list]
+            content_list.append(tr_string)
+        return content_list
 
     def get_reformated_info(self, content_table):
         """
@@ -221,16 +235,13 @@ class process_metrix_repot(object):
         (P) </font></td></tr>
         </tbody></table>
         """
-        tr_list = content_table.find_all('tr')
-        tr_list = tr_list[3:] #前面三行是固定的无用内容
-        for tr in tr_list:
-            td_list = tr.find_all('td')
-            numberlist = [ td.string.strip() for td in td_list[1 : 6]  ]
-            #使用正则表达式把真实数字从numberlist中提取出来
-            real_number = [int(self.script_regex.findall(numberstring)[0]) for numberstring in numberlist]
-            #一个很方便的列表初始化函数参数列表的方法 function(*list_name)
-            reformat_code_info = reformated_code_information(*real_number)
-            pass
+        content_list = self.get_info_from_content_table(content_table)
+        numberlist = [n for n in content_list[0][1 : 6]]
+        #使用正则表达式把真实数字从numberlist中提取出来
+        real_number = [ int(self.script_regex.findall(numberstring)[0]) for numberstring in numberlist ]
+        #一个很方便的列表初始化函数参数列表的方法 function(*list_name)
+        reformat_code_info = reformated_code_information(*real_number)
+        
         return reformat_code_info
 
     def get_metrix_complextity_info(self,  content_table):
@@ -238,16 +249,10 @@ class process_metrix_repot(object):
         获取圈复杂度
         处理<a id="complexity metrics">Complexity Metrics (UTIL.C)</a>下面的信息
         """
-        tr_list = content_table.find_all('tr')
-        if len(tr_list) > 4:
-            tr_list = tr_list[3:-2] #前面3行是固定的无用内容，后面2行是无用的内容
-        else:
-            tr_list = tr_list[3:]
-
         comlextity_list= []
-        for tr in tr_list:
-            td_list = tr.find_all('td')
-            function_name , complextity_num = td_list[0].string.strip(), td_list[2].string.strip()
+        content_list = self.get_info_from_content_table(content_table)
+        for s in content_list:
+            function_name , complextity_num = s[0], s[2]
             number_mattched = self.script_regex.findall(complextity_num)
             if len(number_mattched) != 0: #testbed 报告每10个函数有一个空行
                 complextity_num = int(number_mattched[0])
@@ -255,16 +260,10 @@ class process_metrix_repot(object):
         return comlextity_list
 
     def get_procedure_info(self, content_table):
-        tr_list = content_table.find_all('tr')
-        if len(tr_list) > 4:
-            tr_list = tr_list[3:-2] #前面3行是固定的无用内容，后面2行是无用的内容
-        else:
-            tr_list = tr_list[3:]
-
         procedure_info_list= []
-        for tr in tr_list:
-            td_list = tr.find_all('td')
-            function_name , executeable_lines = td_list[0].string.strip(), td_list[1].string.strip()
+        content_list = self.get_info_from_content_table(content_table)
+        for s in content_list:
+            function_name , executeable_lines = s[0], s[1]
             number_mattched = self.script_regex.findall(executeable_lines)
             if len(number_mattched) != 0: #testbed 报告每10个函数有一个空行
                 executeable_lines = int(number_mattched[0])
@@ -272,22 +271,15 @@ class process_metrix_repot(object):
         return procedure_info_list
 
     def get_data_flow_info(self,  content_table):
-        tr_list = content_table.find_all('tr')
-        if len(tr_list) > 4:
-            tr_list = tr_list[3:-2] #前面3行是固定的无用内容，后面2行是无用的内容
-        else:
-            tr_list = tr_list[3:]
-
         data_flow_list= []
-        for tr in tr_list:
-            td_list = tr.find_all('td')
-            function_name , fanout_num = td_list[0].string.strip(), td_list[3].string.strip()
+        content_list = self.get_info_from_content_table(content_table)
+        for s in content_list:
+            function_name , fanout_num = s[0], s[3]
             number_mattched = self.script_regex.findall(fanout_num)
             if len(number_mattched) != 0: #testbed 报告每10个函数有一个空行
                 fanout_num = int(number_mattched[0])
-                data_flow_list.append((function_name , fanout_num ))
+                data_flow_list.append((function_name , fanout_num))
         return data_flow_list
-
 
 
     def extract_file_name(self, reformat_tag):
