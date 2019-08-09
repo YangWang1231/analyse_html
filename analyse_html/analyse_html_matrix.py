@@ -112,6 +112,18 @@ class metrix_report(object):
         self.fanout_info = [] #list of function fanout
         return 
 
+    def write_to_table(self, source_line_table):
+        """
+        将本文件的metrix信息写入表格
+        """
+        index= len(source_line_table.rows)
+        new_cells = source_line_table.add_row().cells
+        new_cells[0].text = str(index)
+        new_cells[1].text = self.filename
+        new_cells[2].text = str(self.reformated_code_information.total_line_number)
+
+        return
+
     def store_db(self, db_obj):
         """将一个软件的testbed 度量分析结果存入DB
         mainly fill two tables:
@@ -278,7 +290,22 @@ class process_metrix_repot(object):
                     x.__dict__ = decode_obj
             return
 
+    def store_matrix_to_docx(self, docx_obj):
+        """根据软件的testbed 度量分析结果，生成doxc文档
+        """
+        table_list = document.tables
+        if len(table_list) != 1:
+            #should not happen
+            pass
 
+        #process line number table
+        cell = table_list[0].cell(4,0) 
+        source_line_table = cell.tables[0]
+        for k, v in self.total_info_dict.iteritems():
+            v.write_to_table(source_line_table)
+
+        docx_obj.save('demo.docx')
+        return
 
     def store_matrix_to_db(self, db_obj):
         """将一个软件的testbed 度量分析结果存入DB
@@ -408,7 +435,8 @@ class process_metrix_repot(object):
                     
 from store_db_sqlit3 import process_db
 from config import _config_data
-
+from docx import Document
+from docx.shared import Inches
 
 if __name__ == '__main__':
     
@@ -421,7 +449,10 @@ if __name__ == '__main__':
 
     report = process_metrix_repot()
     report.analyse_html(html)
-
+    
+    #以模板为基础，生成度量结果文档
+    document = Document(u'质量度量.docx')
+    report.store_matrix_to_docx(document)
     #produce doc
     
     #report.trans_to_JSON()
