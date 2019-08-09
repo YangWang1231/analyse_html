@@ -87,18 +87,18 @@ class reformated_code_information(object):
 
 
 class function_complexity(object):
+    #debug 
+    object_count = 12
     def __init__(self, fun_name = '' , cycl_info = 0):
         self.function_name = fun_name
         self.Cyclomatic_information = cycl_info
+        self.executeable_lines = function_complexity.object_count  
+        function_complexity.object_count  += 1 #后续需要用真实数据填充
 
 class function_fanout(object):
     def __init__(self, func_name = '', fout = 0):
         self.function_name = func_name
         self.fanout = fout
-
-class temp_class(object):
-    def __init__(self):
-        self.list_names = [function_fanout(), function_fanout()]
 
 
 class metrix_report(object):
@@ -112,16 +112,51 @@ class metrix_report(object):
         self.fanout_info = [] #list of function fanout
         return 
 
-    def write_to_table(self, source_line_table):
+    def get_max_min_lines(self):
+        """
+        获取所有本文件最大/最小模块行号
+        """
+        execute_lines = [e.executeable_lines for e in self.complexity_metrics]
+        execute_lines.sort(reverse = True)
+
+        return  execute_lines[0], execute_lines[-1]
+
+    def write_to_table(self, source_line_table, metrix_table, complexity_fanout_table):
         """
         将本文件的metrix信息写入表格
         """
+
+        #填写各文件代码行数
         index= len(source_line_table.rows)
         new_cells = source_line_table.add_row().cells
         new_cells[0].text = str(index)
         new_cells[1].text = self.filename
         new_cells[2].text = str(self.reformated_code_information.total_line_number)
+        #填写静态质量度量
+        index = len(metrix_table.rows)
+        new_cells = metrix_table.add_row().cells
+        (max_line, min_line )= self.get_max_min_lines()
+        metrix_tuple = (str(index), self.filename, str(self.reformated_code_information.number_of_procedure), '/'.join(str(e)  for e in (max_line, min_line )))
+        
+        for i, e in enumerate(metrix_tuple):
+            new_cells[i].text = e
 
+        #填写复杂度、扇出数表格
+        index = len(complexity_fanout_table.rows)
+        
+        complexity_list = []
+        for e in self.complexity_metrics:
+            row_list = [str(index), e.function_name, str(e.Cyclomatic_information)]
+            for m in self.fanout_info:
+                if m.function_name == e.function_name:
+                    row_list.append(str(m.fanout))
+            complexity_list.append(row_list)
+            index += 1
+            
+        for e in complexity_list:
+            new_cells = complexity_fanout_table.add_row().cells
+            for i, m in enumerate(e):
+                new_cells[i].text = m
         return
 
     def store_db(self, db_obj):
@@ -294,15 +329,26 @@ class process_metrix_repot(object):
         """根据软件的testbed 度量分析结果，生成doxc文档
         """
         table_list = document.tables
+
+        #should not happen
         if len(table_list) != 1:
-            #should not happen
             pass
 
-        #process line number table
+        #open line number table
         cell = table_list[0].cell(4,0) 
         source_line_table = cell.tables[0]
+        
+        #open metrics table
+        cell = table_list[0].cell(5,0) 
+        metrix_table = cell.tables[0]
+
+        #open complexity and fanout table
+        cell = table_list[0].cell(6,0) 
+        complexity_fanout_table = cell.tables[0]
+
+        #fill docx
         for k, v in self.total_info_dict.iteritems():
-            v.write_to_table(source_line_table)
+            v.write_to_table(source_line_table, metrix_table, complexity_fanout_table)
 
         docx_obj.save('demo.docx')
         return
