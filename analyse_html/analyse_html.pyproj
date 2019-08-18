@@ -4,7 +4,7 @@
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>4eeaa17f-2e95-480c-8417-8799fc0bfb95</ProjectGuid>
     <ProjectHome>.</ProjectHome>
-    <StartupFile>analyse_html_matrix.py</StartupFile>
+    <StartupFile>module1.py</StartupFile>
     <SearchPath>
     </SearchPath>
     <WorkingDirectory>.</WorkingDirectory>
@@ -33,6 +33,9 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="make_LDRA_rule_table.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="module1.py">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="store_db_sqlit3.py">
