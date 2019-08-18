@@ -4,14 +4,14 @@
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>4eeaa17f-2e95-480c-8417-8799fc0bfb95</ProjectGuid>
     <ProjectHome>.</ProjectHome>
-    <StartupFile>analyse_html_matrix.py</StartupFile>
+    <StartupFile>store_db_sqlit3.py</StartupFile>
     <SearchPath>
     </SearchPath>
     <WorkingDirectory>.</WorkingDirectory>
     <OutputPath>.</OutputPath>
     <Name>analyse_html</Name>
     <RootNamespace>analyse_html</RootNamespace>
-    <InterpreterId>MSBuild|env_analyze_html|$(MSBuildProjectFullPath)</InterpreterId>
+    <InterpreterId>MSBuild|env_3.7|$(MSBuildProjectFullPath)</InterpreterId>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
     <DebugSymbols>true</DebugSymbols>
@@ -43,6 +43,15 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <Interpreter Include="env_3.7\">
+      <Id>env_3.7</Id>
+      <Version>3.7</Version>
+      <Description>env_3.7 (Python 3.7 (64-bit))</Description>
+      <InterpreterPath>Scripts\python.exe</InterpreterPath>
+      <WindowsInterpreterPath>Scripts\pythonw.exe</WindowsInterpreterPath>
+      <PathEnvironmentVariable>PYTHONPATH</PathEnvironmentVariable>
+      <Architecture>X64</Architecture>
+    </Interpreter>
     <Interpreter Include="env_analyze_html\">
       <Id>env_analyze_html</Id>
       <Version>2.7</Version>
@@ -58,6 +67,7 @@
       <SubType>Code</SubType>
     </Content>
     <Content Include="create_tables.sql" />
+    <Content Include="requirements.txt" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\Python Tools\Microsoft.PythonTools.targets" />
   <!-- Uncomment the CoreCompile target to enable the Build command in

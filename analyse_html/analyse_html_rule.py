@@ -1,7 +1,8 @@
 #!/usr/bin/python
  #coding:utf-8
 import re
-from    urllib import urlopen
+#from    urllib import urlopen
+from urllib.request import urlopen
 from    bs4 import BeautifulSoup
 
 
@@ -142,7 +143,7 @@ class rule_reports(object):
             tablelist = self.bsObj.find_all("table")
             #存放多个表的分析结果，因此使用list
             for table_tag in tablelist:
-                print table_tag
+                print(table_tag)
                 if self.is_rule_table(table_tag):
                         self.result_list.extend(self.get_rule_table_contents(table_tag))
             return self.result_list
@@ -230,7 +231,6 @@ class rule_reports(object):
             match_list = self.script_regex.findall(script_string)
             standard_rule_number_string = match_list[1]
             return standard_rule_number_string 
-
 
 from store_db_sqlit3 import process_db
 

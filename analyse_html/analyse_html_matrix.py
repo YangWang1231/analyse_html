@@ -65,7 +65,8 @@ TODO:
 
 
 import re
-from    urllib import urlopen
+from urllib.request import urlopen
+#from    urllib import urlopen
 from    bs4 import BeautifulSoup
 import json
 from config import _config_data
@@ -357,7 +358,7 @@ class process_metrix_repot(object):
         complexity_fanout_table = cell.tables[0]
 
         #fill docx
-        for k, v in self.total_info_dict.iteritems():
+        for k, v in self.total_info_dict.items():
             v.write_to_table(source_line_table, metrix_table, complexity_fanout_table)
 
         docx_obj.save('demo.docx')

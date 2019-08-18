@@ -174,6 +174,7 @@ class process_db(object):
 
 
 #from analyse_html_matrix import dev_location
+from analyse_html_rule import rule_reports
 from config import _config_data
 dev_location = _config_data['dev_location']
 
